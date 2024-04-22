@@ -18,7 +18,7 @@ builder.Services.AddTransient<NewsDomainService>();
 builder.Services.AddTransient<NewsApplicationService>();
 
 
-
+// just empty line of code
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
