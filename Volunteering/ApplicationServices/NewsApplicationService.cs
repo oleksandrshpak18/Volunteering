@@ -6,7 +6,7 @@ using Volunteering.Data.DomainServices;
 
 namespace Volunteering.ApplicationServices
 {
-    public class NewsApplicationService
+    public class NewsApplicationService : IApplicationService<NewsVM>
     {
         private NewsDomainService _domainService;
         public NewsApplicationService(NewsDomainService domainService)

@@ -22,14 +22,13 @@ namespace Volunteering.Data.DomainServices
 
         public NewsVM ConvertToVm(News obj)
         {
-            NewsVM? res = new NewsVM()
+            return new NewsVM()
             {
                 Id = obj.NewsId,
                 NewsTitle = obj.NewsTitle,
                 NewsText = obj.NewsText,
                 NewsPhotoBase64 = ImageProcessor.ByteToBase64(obj?.NewsPhoto)
             };
-            return res;
         }
 
         public News Add(NewsVM obj)

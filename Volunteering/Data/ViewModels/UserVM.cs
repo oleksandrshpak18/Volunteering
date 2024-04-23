@@ -5,7 +5,7 @@ namespace Volunteering.Data.ViewModels
 {
     public class UserVM
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string UserName { get; set; } = null!;
         public string UserSurname { get; set; } = null!;
 
@@ -17,6 +17,8 @@ namespace Volunteering.Data.ViewModels
         public string? Organisation { get; set; }
         public string? Speciality { get; set; }
         public string? City { get; set; }
+        public string? DateJoined { get; set; }
+        public float? Rating { get; set; }
         
     }
 }

@@ -16,7 +16,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<NewsDomainService>();
 builder.Services.AddTransient<NewsApplicationService>();
-
+builder.Services.AddTransient<UserDomainService>();
+builder.Services.AddTransient<UserApplicationService>();
 
 // just empty line of code
 
