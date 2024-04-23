@@ -6,6 +6,7 @@ namespace Volunteering.Data.ViewModels
 {
     public class NewsVM
     {
+        public int ?Id { get; set; }
         public string NewsTitle { get; set; } = null!;
         public string NewsText { get; set; } = null!;
 
