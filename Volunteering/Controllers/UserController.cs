@@ -20,7 +20,11 @@ namespace Volunteering.Controllers
         [Consumes("multipart/form-data")]
         public IActionResult Register([FromForm] UserVM vm)
         {
-            return Ok(_service.Add(vm));
+            if(ModelState.IsValid)
+            {
+                return Ok(_service.Add(vm));
+            }
+            return BadRequest();
         }
 
         [HttpGet("get-all")]

@@ -86,7 +86,7 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.UserRole)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.UserRoleId)
-                    .HasConstraintName("FK__User__UserRoleId__403A8C7D");
+                    .HasConstraintName("FK__User__UserRoleId__52593CB8");
             });
 
             modelBuilder.Entity<UserRole>(entity =>

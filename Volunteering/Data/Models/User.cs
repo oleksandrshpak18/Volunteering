@@ -17,6 +17,7 @@ namespace Volunteering.Data.Models
         public string? Organisation { get; set; }
         public string? Speciality { get; set; }
         public string? City { get; set; }
+        public float? Rating { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
