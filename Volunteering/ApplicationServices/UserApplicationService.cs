@@ -14,7 +14,7 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public AuthResult Add (UserVM vm)
+        public AuthResult Register (UserVM vm)
         {
             if (_domainService.FindByEmail(vm.Email) != null)
             {
@@ -67,6 +67,45 @@ namespace Volunteering.ApplicationServices
             };
         }
 
+
+        public AuthResult Login(UserLoginRequestVM vm)
+        {
+            var existingUser = _domainService.FindByEmail(vm.Email);
+            if ( existingUser == null)
+            {
+                return new AuthResult()
+                {
+                    Result = false,
+                    Messages = new List<string>()
+                    {
+                        $"Email: {vm.Email}. Invalid payload"
+                    }
+                };
+            }
+
+            var isPasswordCorrect = _domainService.CheckPassword(existingUser, vm.Password);
+
+            if (!isPasswordCorrect)
+            {
+                return new AuthResult()
+                {
+                    Result = false,
+                    Messages = new List<string>()
+                    {
+                        "Invalid credentials" // no more info for security reasons
+                    }
+                };
+            }
+
+            var jwtToken = _domainService.GenerateJwtToken(existingUser);
+
+            return new AuthResult()
+            {
+                Token = jwtToken,
+                Result = true
+            };
+
+        }
         public IEnumerable<UserVM> GetAll()
         {
             return _domainService.GetAll().Select(x => _domainService.ConvertToVm(x));

@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -46,7 +47,17 @@ namespace Volunteering.Data.DomainServices
 
         public User? FindByEmail(string email)
         {
-            return _context.Users.FirstOrDefault(x => x.Email.Equals(email));
+            User ?user = _context.Users.FirstOrDefault(x => x.Email.Equals(email));
+            if (user != null)
+            {
+                UserRole ?role = _context.UserRoles.FirstOrDefault(x => x.Users.Contains(user));
+                if (role != null)
+                {
+                    user.UserRole = role;
+                    return user;
+                }
+            }
+            return null;
         }   
         public UserVM ConvertToVm(User obj)
         {
@@ -59,7 +70,8 @@ namespace Volunteering.Data.DomainServices
                 Organisation = obj.Organisation,
                 Speciality = obj.Speciality,
                 UserPhotoBase64 = ImageProcessor.ByteToBase64(obj.UserPhoto),
-                DateJoined = obj.CreateDate?.ToString("yyyy-MM-dd")
+                DateJoined = obj.CreateDate?.ToString("yyyy-MM-dd"),
+                Rating = obj.Rating
             };
         }
 
@@ -83,6 +95,11 @@ namespace Volunteering.Data.DomainServices
             }
         }
 
+        public bool CheckPassword(User user, string password)
+        {
+            return user.Password.Equals(HashPassword(password));
+        }
+
         public string GenerateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -98,11 +115,10 @@ namespace Volunteering.Data.DomainServices
                     new Claim(JwtRegisteredClaimNames.Email, value: user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, value: DateTime.Now.ToUniversalTime().ToString()),
-                    new Claim("Role", value: user.UserRole.UserRoleName)
+                    new Claim(ClaimTypes.Role, value: user.UserRole.UserRoleName)
                 }),
-
                 Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
             };
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token); // converting SecurityToken to a

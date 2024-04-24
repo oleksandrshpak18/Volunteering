@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volunteering.ApplicationServices;
 using Volunteering.Data.ViewModels;
+using Volunteering.Helpers;
 
 namespace Volunteering.Controllers
 {
@@ -22,7 +24,8 @@ namespace Volunteering.Controllers
             return Ok(_service.GetAll());
         }
 
-        [HttpPost("add")]
+        //[HttpPost("add")]
+        [HttpPost("add"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(NewsVM), 200)]
         [Consumes("multipart/form-data")]
         public IActionResult Add([FromForm]NewsVM vm)
