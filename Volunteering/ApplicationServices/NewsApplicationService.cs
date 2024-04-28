@@ -18,14 +18,20 @@ namespace Volunteering.ApplicationServices
             return _domainService.GetAll().Select(x => _domainService.ConvertToVm(x));
         }
 
-        public NewsVM Add(NewsVM vm)
+        public NewsVM Add(int id, NewsVM vm)
         {
-            return _domainService.ConvertToVm(_domainService.Add(vm));
+            return _domainService.ConvertToVm(_domainService.Add(id, vm));
         }
 
         public NewsVM Update(NewsVM vm)
         {
-            return _domainService.ConvertToVm(_domainService.Update(vm));
+            var res = _domainService.Update( vm);
+            if(res == null)
+            {
+                return null;
+            }
+
+            return _domainService.ConvertToVm(res);
         }
     }
 }

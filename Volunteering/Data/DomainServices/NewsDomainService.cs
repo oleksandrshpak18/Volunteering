@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.IO;
 using System.Net.Mime;
 using Volunteering.Data.Interfaces;
@@ -17,7 +18,9 @@ namespace Volunteering.Data.DomainServices
         }
         public IEnumerable<News> GetAll()
         {
-            return _context.News.ToList();
+            return _context.News
+                .Include(n => n.User)
+                .ToList();
         }
 
         public NewsVM ConvertToVm(News obj)
@@ -25,16 +28,18 @@ namespace Volunteering.Data.DomainServices
             return new NewsVM()
             {
                 Id = obj.NewsId,
-                NewsTitle = obj.NewsTitle,
-                NewsText = obj.NewsText,
+                Author = $"{obj?.User?.UserName} {obj?.User?.UserSurname}",
+                NewsTitle = obj?.NewsTitle,
+                NewsText = obj?.NewsText,
                 NewsPhotoBase64 = ImageProcessor.ByteToBase64(obj?.NewsPhoto)
             };
         }
 
-        public News Add(NewsVM obj)
+        public News Add(int id, NewsVM obj)
         {
             News res = new News()
             {
+                UserId = id,
                 NewsTitle = obj.NewsTitle,
                 NewsText = obj.NewsText,
                 NewsPhoto = ImageProcessor.ImageToByte(obj?.NewsPhoto)
@@ -44,16 +49,19 @@ namespace Volunteering.Data.DomainServices
             return res;
         }
 
-        public News Update(NewsVM obj)
+        public News? Update( NewsVM obj)
         {
-            News res = new News()
+            News ?res = _context.News.Find(obj.Id);
+
+            if(res != null)
             {
-                NewsTitle = obj.NewsTitle,
-                NewsText = obj.NewsText,
-                NewsPhoto = ImageProcessor.ImageToByte(obj?.NewsPhoto)
-            };
-            _context.News.Add(res);
-            _context.SaveChanges();
+                res.NewsTitle = obj.NewsTitle;
+                res.NewsText = obj.NewsText;
+                res.NewsPhoto = ImageProcessor.ImageToByte(obj?.NewsPhoto);
+
+                _context.SaveChanges();
+            }
+            
             return res;
         }
     }

@@ -15,6 +15,7 @@ namespace Volunteering.Data.ViewModels
         
         [FromForm(Name = "NewsPhoto")] 
         public IFormFile? NewsPhoto { get; set; }  
-        public string? NewsPhotoBase64 { get; set; }
+        public string? NewsPhotoBase64 { get; set; }            
+        public string? Author { get; set; }
     }
 }

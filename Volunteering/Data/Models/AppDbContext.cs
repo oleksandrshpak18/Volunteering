@@ -60,6 +60,8 @@ namespace Volunteering.Data.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.FinishDate).HasColumnType("datetime");
+
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.CampaignPriority)
@@ -380,7 +382,6 @@ namespace Volunteering.Data.Models
             OnModelCreatingPartial(modelBuilder);
         }
 
-   
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
