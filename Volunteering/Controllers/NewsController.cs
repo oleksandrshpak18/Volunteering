@@ -17,7 +17,7 @@ namespace Volunteering.Controllers
             _service = service;
         }
 
-        [HttpGet("get-all")]
+        [HttpGet("get-all"), AllowAnonymous]
         [ProducesResponseType(typeof(List<NewsVM>), 200)] 
         public IActionResult GetAll()
         {
@@ -32,6 +32,18 @@ namespace Volunteering.Controllers
             if (ModelState.IsValid)
             {
                 return Ok(_service.Add(vm));
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("update"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(NewsVM), 200)]
+        [Consumes("multipart/form-data")]
+        public IActionResult Update([FromForm] NewsVM vm)
+        {
+            if (ModelState.IsValid)
+            {
+                return Ok(_service.Update(vm));
             }
             return BadRequest();
         }

@@ -22,5 +22,10 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.ConvertToVm(_domainService.Add(vm));
         }
+
+        public NewsVM Update(NewsVM vm)
+        {
+            return _domainService.ConvertToVm(_domainService.Update(vm));
+        }
     }
 }

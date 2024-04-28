@@ -43,5 +43,18 @@ namespace Volunteering.Data.DomainServices
             _context.SaveChanges();
             return res;
         }
+
+        public News Update(NewsVM obj)
+        {
+            News res = new News()
+            {
+                NewsTitle = obj.NewsTitle,
+                NewsText = obj.NewsText,
+                NewsPhoto = ImageProcessor.ImageToByte(obj?.NewsPhoto)
+            };
+            _context.News.Add(res);
+            _context.SaveChanges();
+            return res;
+        }
     }
 }

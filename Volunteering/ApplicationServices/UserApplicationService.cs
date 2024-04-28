@@ -1,4 +1,5 @@
-﻿using Volunteering.Data.DomainServices;
+﻿using System.Linq;
+using Volunteering.Data.DomainServices;
 using Volunteering.Data.Interfaces;
 using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
@@ -21,7 +22,7 @@ namespace Volunteering.ApplicationServices
                 return new AuthResult()
                 {
                     Result = false,
-                    Messages = new List<string>()
+                    Errors = new List<string>()
                     {
                         "Email already exists"
                     }
@@ -31,7 +32,7 @@ namespace Volunteering.ApplicationServices
             try
             {
                 User user = _domainService.Register(vm);
-                
+
                 if (user != null)
                 {
                     string token = _domainService.GenerateJwtToken(user);
@@ -39,8 +40,7 @@ namespace Volunteering.ApplicationServices
                     return new AuthResult()
                     {
                         Result = true,
-                        Token = token,
-                        Messages = new List<string>() { "Register successfull"}
+                        Token = token
                     };
                 }
             }
@@ -49,7 +49,7 @@ namespace Volunteering.ApplicationServices
                 return new AuthResult()
                 {
                     Result = false,
-                    Messages = new List<string>()
+                    Errors = new List<string>()
                     {
                         "Error on a server side when creating a user.",
                         ex.Message
@@ -60,7 +60,7 @@ namespace Volunteering.ApplicationServices
             return new AuthResult()
             {
                 Result = false,
-                Messages = new List<string>()
+                Errors = new List<string>()
                     {
                         "Internal error on the server when creating a user.",
                     }
@@ -76,7 +76,7 @@ namespace Volunteering.ApplicationServices
                 return new AuthResult()
                 {
                     Result = false,
-                    Messages = new List<string>()
+                    Errors = new List<string>()
                     {
                         $"Email: {vm.Email}. Invalid payload"
                     }
@@ -90,7 +90,7 @@ namespace Volunteering.ApplicationServices
                 return new AuthResult()
                 {
                     Result = false,
-                    Messages = new List<string>()
+                    Errors = new List<string>()
                     {
                         "Invalid credentials" // no more info for security reasons
                     }

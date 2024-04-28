@@ -16,18 +16,24 @@ namespace Volunteering.Controllers
             _service = service;
         }
 
-        // TODO: remaster usage of UserVM to use UserRegisterRequestVM here instead of UserVM
         [HttpPost("register")]
         [ProducesResponseType(typeof(AuthResult), 200)]
         [Consumes("multipart/form-data")]
         public IActionResult Register([FromForm] UserRegisterRequest vm) 
         {
-            // TODO: change the logic of return types here
             if(ModelState.IsValid)
             {
-                return Ok(_service.Register(vm));
+                var res = _service.Register(vm);
+                if (res.Result == true)
+                {
+                    return Ok(res);
+                }
+                else
+                {
+                    return BadRequest(res);
+                }
             }
-            return BadRequest();
+             return BadRequest();
         }
 
         [HttpPost("login")]
@@ -36,14 +42,18 @@ namespace Volunteering.Controllers
         {
             if (ModelState.IsValid)
             {
-                return Ok(_service.Login(vm));
+                var res = _service.Login(vm);
+                if (res.Result == true)
+                {
+                    return Ok(res);
+                }
+                else
+                {
+                    return BadRequest(res);
+                }
             }
 
-            return BadRequest( new AuthResult()
-            {
-                Result = false,
-                Messages = new List<string>() { "Invalid payload"}  
-            });
+            return BadRequest();
         }
 
         [HttpGet("get-all")]
