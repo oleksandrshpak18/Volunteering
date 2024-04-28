@@ -20,7 +20,7 @@ namespace Volunteering.Controllers
         [HttpPost("register")]
         [ProducesResponseType(typeof(AuthResult), 200)]
         [Consumes("multipart/form-data")]
-        public IActionResult Register([FromForm] UserVM vm) 
+        public IActionResult Register([FromForm] UserRegisterRequest vm) 
         {
             // TODO: change the logic of return types here
             if(ModelState.IsValid)

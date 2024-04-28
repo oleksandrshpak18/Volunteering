@@ -24,7 +24,6 @@ namespace Volunteering.Controllers
             return Ok(_service.GetAll());
         }
 
-        //[HttpPost("add")]
         [HttpPost("add"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(NewsVM), 200)]
         [Consumes("multipart/form-data")]

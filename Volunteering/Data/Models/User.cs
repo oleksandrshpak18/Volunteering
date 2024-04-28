@@ -5,11 +5,19 @@ namespace Volunteering.Data.Models
 {
     public partial class User
     {
+        public User()
+        {
+            Donations = new HashSet<Donation>();
+            News = new HashSet<News>();
+            UserCampaigns = new HashSet<UserCampaign>();
+        }
+
         public int UserId { get; set; }
         public int? UserRoleId { get; set; }
         public string UserName { get; set; } = null!;
         public string UserSurname { get; set; } = null!;
         public byte[]? UserPhoto { get; set; }
+        public byte[]? UserPhotoPassport { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string? PhoneNumber { get; set; }
@@ -22,5 +30,8 @@ namespace Volunteering.Data.Models
         public DateTime? UpdateDate { get; set; }
 
         public virtual UserRole? UserRole { get; set; }
+        public virtual ICollection<Donation> Donations { get; set; }
+        public virtual ICollection<News> News { get; set; }
+        public virtual ICollection<UserCampaign> UserCampaigns { get; set; }
     }
 }

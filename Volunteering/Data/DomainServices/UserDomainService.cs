@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,10 +11,11 @@ using Volunteering.Data.Interfaces;
 using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
 using Volunteering.Helpers;
+using BCrypt.Net;
 
 namespace Volunteering.Data.DomainServices
 {
-    public class UserDomainService : IDomainService<UserVM, User>
+    public class UserDomainService
     {
         private AppDbContext _context;
         private readonly IConfiguration _configuration;
@@ -22,8 +25,10 @@ namespace Volunteering.Data.DomainServices
             _configuration = configuration;
         }
 
-        public User Add(UserVM obj) 
+        public User Register(UserRegisterRequest obj) 
         {
+            if(obj == null) { throw new ArgumentNullException(nameof(obj)); }
+
             User newUser = new User()
             { 
                 UserRole = _context.UserRoles.FirstOrDefault(x => x.UserRoleName.Equals("Registered")),
@@ -31,19 +36,26 @@ namespace Volunteering.Data.DomainServices
                 UserSurname = obj.UserSurname,
                 UserPhoto = ImageProcessor.ImageToByte(obj.UserPhoto),
                 Email = obj.Email,
-                Password = HashPassword(obj?.Password),
-                PhoneNumber = obj?.PhoneNumber,
-                Organisation = obj?.Organisation,
-                Speciality = obj?.Speciality,
-                City = obj?.City,
+                Password = HashPassword(obj.Password),
                 Rating = 0
             };
+
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
             return newUser;
         }
 
+        private static string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
+        }
+
+        public bool VerifyPassword(User? user, string enteredPassword)
+        {
+            if (user == null) return false;
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, user?.Password);
+        }
 
         public User? FindByEmail(string email)
         {
@@ -83,21 +95,6 @@ namespace Volunteering.Data.DomainServices
         public float GetRating(int userId)
         {
             throw new NotImplementedException("Get rating is not implemented yet.");
-        }
-
-        private string HashPassword(string ?password)
-        {
-            using (var sha = SHA256.Create())
-            {
-                var asByteArray = Encoding.UTF8.GetBytes(password);
-                var hashedPassword = sha.ComputeHash(asByteArray);
-                return Convert.ToBase64String(hashedPassword);
-            }
-        }
-
-        public bool CheckPassword(User user, string password)
-        {
-            return user.Password.Equals(HashPassword(password));
         }
 
         public string GenerateJwtToken(User user)

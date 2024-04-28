@@ -14,7 +14,7 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public AuthResult Register (UserVM vm)
+        public AuthResult Register (UserRegisterRequest vm)
         {
             if (_domainService.FindByEmail(vm.Email) != null)
             {
@@ -30,7 +30,7 @@ namespace Volunteering.ApplicationServices
 
             try
             {
-                User user = _domainService.Add(vm);
+                User user = _domainService.Register(vm);
                 
                 if (user != null)
                 {
@@ -83,7 +83,7 @@ namespace Volunteering.ApplicationServices
                 };
             }
 
-            var isPasswordCorrect = _domainService.CheckPassword(existingUser, vm.Password);
+            var isPasswordCorrect = _domainService.VerifyPassword(existingUser, vm.Password);
 
             if (!isPasswordCorrect)
             {
