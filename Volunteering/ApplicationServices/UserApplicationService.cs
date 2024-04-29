@@ -110,5 +110,22 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.GetAll().Select(x => _domainService.ConvertToVm(x));
         }
+
+        public bool ?IsInfoFilled(int userId)
+        {
+            return _domainService.IsInfoFilled(userId);
+        }
+
+        public UserVM Update(int userId, UserDetailsVM user)
+        {
+            var res = _domainService.Update(userId, user);
+
+            if (res == null)
+            {
+                return null;
+            }
+
+            return _domainService.ConvertToVm(res);
+        }
     }
 }

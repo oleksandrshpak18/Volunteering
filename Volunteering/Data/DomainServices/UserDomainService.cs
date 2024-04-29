@@ -12,6 +12,7 @@ using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
 using Volunteering.Helpers;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Volunteering.Data.DomainServices
 {
@@ -57,6 +58,30 @@ namespace Volunteering.Data.DomainServices
             return BCrypt.Net.BCrypt.Verify(enteredPassword, user?.Password);
         }
 
+        public string GenerateJwtToken(User user)
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig:SecretKey").Value);
+
+            // token descriptor
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim("UserId", value: user.UserId.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Sub, value: user.Email),
+                    new Claim(JwtRegisteredClaimNames.Email, value: user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, value: DateTime.Now.ToUniversalTime().ToString()),
+                    new Claim(ClaimTypes.Role, value: user.UserRole.UserRoleName)
+                }),
+                Expires = DateTime.Now.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+            };
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            return jwtTokenHandler.WriteToken(token); // converting SecurityToken to a
+        }
+
         public User? FindByEmail(string email)
         {
             User ?user = _context.Users.FirstOrDefault(x => x.Email.Equals(email));
@@ -97,28 +122,42 @@ namespace Volunteering.Data.DomainServices
             throw new NotImplementedException("Get rating is not implemented yet.");
         }
 
-        public string GenerateJwtToken(User user)
+        public bool? IsInfoFilled(int userId)
         {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig:SecretKey").Value);
-
-            // token descriptor
-            var tokenDescriptor = new SecurityTokenDescriptor()
+            var user = _context.Users.Find(userId);
+            if (user == null)
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("UserId", value: user.UserId.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Sub, value: user.Email),
-                    new Claim(JwtRegisteredClaimNames.Email, value: user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, value: DateTime.Now.ToUniversalTime().ToString()),
-                    new Claim(ClaimTypes.Role, value: user.UserRole.UserRoleName)
-                }),
-                Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
-            };
-            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-            return jwtTokenHandler.WriteToken(token); // converting SecurityToken to a
+                return null;
+            }
+
+            return user.UserPhotoPassport != null
+                && user.CardNumber != null
+                && user.UserPhoto != null
+                && user.City != null
+                && user.Organisation != null
+                && user.Speciality != null
+                && user.PhoneNumber != null
+                && user.UserName != null
+                && user.UserSurname != null;
+        }
+
+        public User? Update (int userId, UserDetailsVM newUser)
+        {
+            User? user = _context.Users.Find(userId);
+
+            if (user != null)
+            {
+                user.PhoneNumber = newUser.PhoneNumber;
+                user.Organisation = newUser.Organisation;
+                user.Speciality = newUser.Speciality;
+                user.City = newUser.City;
+                user.UserPhotoPassport = ImageProcessor.ImageToByte(newUser.UserPhotoPassport);
+                user.CardNumber = newUser.CardNumber;
+
+                _context.SaveChanges();
+            }
+
+            return user;
         }
     }
 }

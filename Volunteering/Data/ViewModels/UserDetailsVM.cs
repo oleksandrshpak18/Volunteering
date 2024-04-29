@@ -1,0 +1,22 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+
+namespace Volunteering.Data.ViewModels
+{
+    public class UserDetailsVM
+    {
+        [Required]
+        public string PhoneNumber { get; set; }
+        [Required]
+        public string CardNumber { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string Speciality { get; set; }
+        [Required]
+        public string Organisation { get; set; }
+        [Required]
+        [FromForm(Name = "UserPhotoPassport")]
+        public IFormFile UserPhotoPassport { get; set; }
+    }
+}
