@@ -4,7 +4,7 @@
         where T : class // viewmodel class
     {
         public IEnumerable<T> GetAll();
-        public T Add(int id, T obj);
+        public T Add(Guid id, T obj);
 
     }
 }

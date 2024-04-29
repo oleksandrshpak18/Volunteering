@@ -10,7 +10,7 @@ namespace Volunteering.Data.Models
             Campaigns = new HashSet<Campaign>();
         }
 
-        public int CampaignPriorityId { get; set; }
+        public Guid CampaignPriorityId { get; set; }
         public byte PriorityValue { get; set; }
         public string PriorityDescription { get; set; } = null!;
         public DateTime? CreateDate { get; set; }

@@ -1,13 +1,17 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Volunteering.ApplicationServices;
 using Volunteering.Data.DomainServices;
+using Volunteering.Data.Mapping;
 using Volunteering.Data.Models;
 using Volunteering.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(typeof(NewsMappingProfile).Assembly);
 
 // Add services to the container.
 

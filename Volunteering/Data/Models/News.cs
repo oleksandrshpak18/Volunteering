@@ -5,8 +5,8 @@ namespace Volunteering.Data.Models
 {
     public partial class News
     {
-        public int NewsId { get; set; }
-        public int? UserId { get; set; }
+        public Guid NewsId { get; set; }
+        public Guid? UserId { get; set; }
         public string NewsTitle { get; set; } = null!;
         public string NewsText { get; set; } = null!;
         public byte[]? NewsPhoto { get; set; }

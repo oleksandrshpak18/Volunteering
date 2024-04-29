@@ -7,7 +7,8 @@ namespace Volunteering.Data.ViewModels
 {
     public class NewsVM
     {
-        public int ?Id { get; set; }
+        public Guid? NewsId { get; set; }
+        public Guid? UserId { get; set; }
         [Required]
         public string NewsTitle { get; set; } = null!;
         [Required]

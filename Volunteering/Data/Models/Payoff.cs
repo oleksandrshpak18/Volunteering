@@ -5,8 +5,8 @@ namespace Volunteering.Data.Models
 {
     public partial class Payoff
     {
-        public int PayoffId { get; set; }
-        public int CampaignId { get; set; }
+        public Guid PayoffId { get; set; }
+        public Guid CampaignId { get; set; }
         public string RecipientName { get; set; } = null!;
         public string RecipientSurname { get; set; } = null!;
         public string RecippientCardNumber { get; set; } = null!;

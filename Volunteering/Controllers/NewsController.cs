@@ -31,7 +31,7 @@ namespace Volunteering.Controllers
         [Consumes("multipart/form-data")]
         public IActionResult Add([FromForm]NewsVM vm)
         {
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
 
             if (ModelState.IsValid)
             {
@@ -47,7 +47,9 @@ namespace Volunteering.Controllers
         {
             if (ModelState.IsValid)
             {
-                var res = _service.Update(vm);
+                Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+
+                var res = _service.Update(userId, vm);
                 if(res != null)
                 {
                     return Ok(res);

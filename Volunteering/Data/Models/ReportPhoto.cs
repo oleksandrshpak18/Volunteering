@@ -10,7 +10,7 @@ namespace Volunteering.Data.Models
             ReportReportPhotos = new HashSet<ReportReportPhoto>();
         }
 
-        public int ReportPhotoId { get; set; }
+        public Guid ReportPhotoId { get; set; }
         public byte[] Photo { get; set; } = null!;
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

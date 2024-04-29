@@ -34,27 +34,25 @@ namespace Volunteering.Data.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("Cyrillic_General_CI_AS");
+
             modelBuilder.Entity<Campaign>(entity =>
             {
                 entity.ToTable("Campaign");
+
+                entity.Property(e => e.CampaignId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Accumulated)
                     .HasColumnType("money")
                     .HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.ApplianceDescription)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+                entity.Property(e => e.ApplianceDescription).HasMaxLength(1000);
 
-                entity.Property(e => e.CampaignDescription)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+                entity.Property(e => e.CampaignDescription).HasMaxLength(1000);
 
                 entity.Property(e => e.CampaignGoal).HasColumnType("money");
 
-                entity.Property(e => e.CampaignName)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.CampaignName).HasMaxLength(256);
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -67,35 +65,35 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.CampaignPriority)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.CampaignPriorityId)
-                    .HasConstraintName("FK__Campaign__Campai__5FB337D6");
+                    .HasConstraintName("FK__Campaign__Campai__6B24EA82");
 
                 entity.HasOne(d => d.CampaignStatus)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.CampaignStatusId)
-                    .HasConstraintName("FK__Campaign__Campai__5EBF139D");
+                    .HasConstraintName("FK__Campaign__Campai__6A30C649");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Campaign__Catego__5DCAEF64");
+                    .HasConstraintName("FK__Campaign__Catego__693CA210");
 
                 entity.HasOne(d => d.Report)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.ReportId)
-                    .HasConstraintName("FK__Campaign__Report__5CD6CB2B");
+                    .HasConstraintName("FK__Campaign__Report__68487DD7");
             });
 
             modelBuilder.Entity<CampaignPriority>(entity =>
             {
                 entity.ToTable("CampaignPriority");
 
+                entity.Property(e => e.CampaignPriorityId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.PriorityDescription)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.PriorityDescription).HasMaxLength(256);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             });
@@ -104,13 +102,13 @@ namespace Volunteering.Data.Models
             {
                 entity.ToTable("CampaignStatus");
 
+                entity.Property(e => e.CampaignStatusId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.StatusName)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.StatusName).HasMaxLength(256);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             });
@@ -119,9 +117,9 @@ namespace Volunteering.Data.Models
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.CategoryName)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.CategoryId).HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.CategoryName).HasMaxLength(256);
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -134,6 +132,8 @@ namespace Volunteering.Data.Models
             {
                 entity.ToTable("CategorySubcategory");
 
+                entity.Property(e => e.CategorySubcategoryId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -143,17 +143,19 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.CategorySubcategories)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__CategoryS__Categ__47DBAE45");
+                    .HasConstraintName("FK__CategoryS__Categ__4D94879B");
 
                 entity.HasOne(d => d.Subcategory)
                     .WithMany(p => p.CategorySubcategories)
                     .HasForeignKey(d => d.SubcategoryId)
-                    .HasConstraintName("FK__CategoryS__Subca__48CFD27E");
+                    .HasConstraintName("FK__CategoryS__Subca__4E88ABD4");
             });
 
             modelBuilder.Entity<Donation>(entity =>
             {
                 entity.ToTable("Donation");
+
+                entity.Property(e => e.DonationId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -166,37 +168,37 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Campaign)
                     .WithMany(p => p.Donations)
                     .HasForeignKey(d => d.CampaignId)
-                    .HasConstraintName("FK__Donation__Campai__6A30C649");
+                    .HasConstraintName("FK__Donation__Campai__778AC167");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Donations)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Donation__UserId__693CA210");
+                    .HasConstraintName("FK__Donation__UserId__76969D2E");
             });
 
             modelBuilder.Entity<News>(entity =>
             {
+                entity.Property(e => e.NewsId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.NewsText).IsUnicode(false);
-
-                entity.Property(e => e.NewsTitle)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.NewsTitle).HasMaxLength(256);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__News__UserId__3E52440B");
+                    .HasConstraintName("FK__News__UserId__412EB0B6");
             });
 
             modelBuilder.Entity<Payoff>(entity =>
             {
                 entity.ToTable("Payoff");
+
+                entity.Property(e => e.PayoffId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -204,17 +206,11 @@ namespace Volunteering.Data.Models
 
                 entity.Property(e => e.PayoffValue).HasColumnType("money");
 
-                entity.Property(e => e.RecipientName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.RecipientName).HasMaxLength(50);
 
-                entity.Property(e => e.RecipientSurname)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.RecipientSurname).HasMaxLength(50);
 
-                entity.Property(e => e.RecippientCardNumber)
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+                entity.Property(e => e.RecippientCardNumber).HasMaxLength(16);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 
@@ -222,24 +218,22 @@ namespace Volunteering.Data.Models
                     .WithMany(p => p.Payoffs)
                     .HasForeignKey(d => d.CampaignId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Payoff__Campaign__6E01572D");
+                    .HasConstraintName("FK__Payoff__Campaign__7C4F7684");
             });
 
             modelBuilder.Entity<Report>(entity =>
             {
                 entity.ToTable("Report");
 
+                entity.Property(e => e.ReportId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.ReportDescription)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
+                entity.Property(e => e.ReportDescription).HasMaxLength(500);
 
-                entity.Property(e => e.ReportName)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.ReportName).HasMaxLength(256);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             });
@@ -247,6 +241,8 @@ namespace Volunteering.Data.Models
             modelBuilder.Entity<ReportPhoto>(entity =>
             {
                 entity.ToTable("ReportPhoto");
+
+                entity.Property(e => e.ReportPhotoId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -259,6 +255,8 @@ namespace Volunteering.Data.Models
             {
                 entity.ToTable("ReportReportPhoto");
 
+                entity.Property(e => e.ReportReportPhotoId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -268,25 +266,25 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Report)
                     .WithMany(p => p.ReportReportPhotos)
                     .HasForeignKey(d => d.ReportId)
-                    .HasConstraintName("FK__ReportRep__Repor__5535A963");
+                    .HasConstraintName("FK__ReportRep__Repor__5EBF139D");
 
                 entity.HasOne(d => d.ReportPhoto)
                     .WithMany(p => p.ReportReportPhotos)
                     .HasForeignKey(d => d.ReportPhotoId)
-                    .HasConstraintName("FK__ReportRep__Repor__5629CD9C");
+                    .HasConstraintName("FK__ReportRep__Repor__5FB337D6");
             });
 
             modelBuilder.Entity<Subcategory>(entity =>
             {
                 entity.ToTable("Subcategory");
 
+                entity.Property(e => e.SubcategoryId).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.SubcategoryName)
-                    .HasMaxLength(256)
-                    .IsUnicode(false);
+                entity.Property(e => e.SubcategoryName).HasMaxLength(256);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             });
@@ -295,57 +293,45 @@ namespace Volunteering.Data.Models
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.CardNumber)
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+                entity.Property(e => e.UserId).HasDefaultValueSql("(newid())");
 
-                entity.Property(e => e.City)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.CardNumber).HasMaxLength(16);
+
+                entity.Property(e => e.City).HasMaxLength(100);
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Email)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Email).HasMaxLength(255);
 
-                entity.Property(e => e.Organisation)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Organisation).HasMaxLength(255);
 
-                entity.Property(e => e.Password)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Password).HasMaxLength(60);
 
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                entity.Property(e => e.PhoneNumber).HasMaxLength(20);
 
-                entity.Property(e => e.Speciality)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Speciality).HasMaxLength(255);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.UserDescription).HasMaxLength(255);
 
-                entity.Property(e => e.UserSurname)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.UserName).HasMaxLength(50);
+
+                entity.Property(e => e.UserSurname).HasMaxLength(50);
 
                 entity.HasOne(d => d.UserRole)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.UserRoleId)
-                    .HasConstraintName("FK__User__UserRoleId__3A81B327");
+                    .HasConstraintName("FK__User__UserRoleId__3C69FB99");
             });
 
             modelBuilder.Entity<UserCampaign>(entity =>
             {
                 entity.ToTable("UserCampaign");
+
+                entity.Property(e => e.UserCampaignId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -356,17 +342,19 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Campaign)
                     .WithMany(p => p.UserCampaigns)
                     .HasForeignKey(d => d.CampaignId)
-                    .HasConstraintName("FK__UserCampa__Campa__656C112C");
+                    .HasConstraintName("FK__UserCampa__Campa__71D1E811");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserCampaigns)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserCampa__UserI__6477ECF3");
+                    .HasConstraintName("FK__UserCampa__UserI__70DDC3D8");
             });
 
             modelBuilder.Entity<UserRole>(entity =>
             {
                 entity.ToTable("UserRole");
+
+                entity.Property(e => e.UserRoleId).HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -374,9 +362,7 @@ namespace Volunteering.Data.Models
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UserRoleName)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.UserRoleName).HasMaxLength(255);
             });
 
             OnModelCreatingPartial(modelBuilder);

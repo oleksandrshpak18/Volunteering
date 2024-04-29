@@ -13,6 +13,7 @@ using Volunteering.Data.ViewModels;
 using Volunteering.Helpers;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace Volunteering.Data.DomainServices
 {
@@ -20,10 +21,12 @@ namespace Volunteering.Data.DomainServices
     {
         private AppDbContext _context;
         private readonly IConfiguration _configuration;
-        public UserDomainService(AppDbContext context, IConfiguration configuration)
+        private readonly IMapper _mapper;
+        public UserDomainService(AppDbContext context, IConfiguration configuration, IMapper mapper)
         {
             _context = context;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public User Register(UserRegisterRequest obj) 
@@ -37,7 +40,7 @@ namespace Volunteering.Data.DomainServices
                 UserSurname = obj.UserSurname,
                 UserPhoto = ImageProcessor.ImageToByte(obj.UserPhoto),
                 Email = obj.Email,
-                Password = HashPassword(obj.Password),
+                Password = HashProcessor.HashPassword(obj.Password),
                 Rating = 0
             };
 
@@ -47,16 +50,20 @@ namespace Volunteering.Data.DomainServices
             return newUser;
         }
 
-        private static string HashPassword(string password)
+        public bool VerifyPassword(User existingUser, string enteredPassword)
         {
-            return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
+            return HashProcessor.VerifyPassword(existingUser.Password, enteredPassword);
         }
+        //private static string HashPassword(string password)
+        //{
+        //    return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
+        //}
 
-        public bool VerifyPassword(User? user, string enteredPassword)
-        {
-            if (user == null) return false;
-            return BCrypt.Net.BCrypt.Verify(enteredPassword, user?.Password);
-        }
+        //public bool VerifyPassword(User? user, string enteredPassword)
+        //{
+        //    if (user == null) return false;
+        //    return BCrypt.Net.BCrypt.Verify(enteredPassword, user?.Password);
+        //}
 
         public string GenerateJwtToken(User user)
         {
@@ -96,6 +103,16 @@ namespace Volunteering.Data.DomainServices
             }
             return null;
         }   
+
+        //public UserVM ModelToVm(User user)
+        //{
+        //    return _mapper.Map<UserVM>(user);
+        //}
+        //public List<UserVM> ModelToVm(List<User> userList)
+        //{
+        //    return _mapper.Map<List<UserVM>>(userList);
+        //}
+
         public UserVM ConvertToVm(User obj)
         {
             return new UserVM()
@@ -122,7 +139,7 @@ namespace Volunteering.Data.DomainServices
             throw new NotImplementedException("Get rating is not implemented yet.");
         }
 
-        public bool? IsInfoFilled(int userId)
+        public bool? IsInfoFilled(Guid userId)
         {
             var user = _context.Users.Find(userId);
             if (user == null)
@@ -141,7 +158,7 @@ namespace Volunteering.Data.DomainServices
                 && user.UserSurname != null;
         }
 
-        public User? Update (int userId, UserDetailsVM newUser)
+        public User? Update (Guid userId, UserDetailsVM newUser)
         {
             User? user = _context.Users.Find(userId);
 

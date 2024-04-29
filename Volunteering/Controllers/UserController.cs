@@ -68,7 +68,7 @@ namespace Volunteering.Controllers
         [ProducesResponseType(typeof(Boolean), 200)]
         public IActionResult IsInfoFiled()
         {
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
             bool ?res = _service.IsInfoFilled(userId);
             if(res == null)
             {
@@ -82,7 +82,7 @@ namespace Volunteering.Controllers
         [ProducesResponseType(typeof(UserVM), 200)]
         public IActionResult Update([FromForm]UserDetailsVM user)
         {
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+            var userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
             UserVM? res = _service.Update(userId, user);
             if (res == null)
             {

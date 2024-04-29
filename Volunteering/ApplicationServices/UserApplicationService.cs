@@ -108,15 +108,16 @@ namespace Volunteering.ApplicationServices
         }
         public IEnumerable<UserVM> GetAll()
         {
+            // return _domainService.ModelToVm(_domainService.GetAll());
             return _domainService.GetAll().Select(x => _domainService.ConvertToVm(x));
         }
 
-        public bool ?IsInfoFilled(int userId)
+        public bool ?IsInfoFilled(Guid userId)
         {
             return _domainService.IsInfoFilled(userId);
         }
 
-        public UserVM Update(int userId, UserDetailsVM user)
+        public UserVM Update(Guid userId, UserDetailsVM user)
         {
             var res = _domainService.Update(userId, user);
 
@@ -125,6 +126,7 @@ namespace Volunteering.ApplicationServices
                 return null;
             }
 
+            //return _domainService.ModelToVm(res);
             return _domainService.ConvertToVm(res);
         }
     }

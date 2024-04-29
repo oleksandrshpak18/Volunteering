@@ -5,9 +5,9 @@ namespace Volunteering.Data.Models
 {
     public partial class Donation
     {
-        public int DonationId { get; set; }
-        public int? UserId { get; set; }
-        public int? CampaignId { get; set; }
+        public Guid DonationId { get; set; }
+        public Guid? UserId { get; set; }
+        public Guid? CampaignId { get; set; }
         public decimal? DonationValue { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

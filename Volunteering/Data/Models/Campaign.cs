@@ -12,11 +12,11 @@ namespace Volunteering.Data.Models
             UserCampaigns = new HashSet<UserCampaign>();
         }
 
-        public int CampaignId { get; set; }
-        public int? ReportId { get; set; }
-        public int? CategoryId { get; set; }
-        public int? CampaignStatusId { get; set; }
-        public int? CampaignPriorityId { get; set; }
+        public Guid CampaignId { get; set; }
+        public Guid? ReportId { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? CampaignStatusId { get; set; }
+        public Guid? CampaignPriorityId { get; set; }
         public string CampaignName { get; set; } = null!;
         public string CampaignDescription { get; set; } = null!;
         public string ApplianceDescription { get; set; } = null!;

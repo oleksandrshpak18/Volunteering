@@ -10,7 +10,7 @@ namespace Volunteering.Data.Models
             Users = new HashSet<User>();
         }
 
-        public int UserRoleId { get; set; }
+        public Guid UserRoleId { get; set; }
         public string UserRoleName { get; set; } = null!;
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

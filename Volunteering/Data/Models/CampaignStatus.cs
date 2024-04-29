@@ -10,7 +10,7 @@ namespace Volunteering.Data.Models
             Campaigns = new HashSet<Campaign>();
         }
 
-        public int CampaignStatusId { get; set; }
+        public Guid CampaignStatusId { get; set; }
         public string StatusName { get; set; } = null!;
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

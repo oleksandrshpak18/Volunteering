@@ -10,7 +10,7 @@ namespace Volunteering.Data.Models
             CategorySubcategories = new HashSet<CategorySubcategory>();
         }
 
-        public int SubcategoryId { get; set; }
+        public Guid SubcategoryId { get; set; }
         public string SubcategoryName { get; set; } = null!;
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
