@@ -12,9 +12,9 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public IEnumerable<CampaignVM> GetAll()
+        public IEnumerable<CampaignVM> GetAll(CampaignFilter ?filter)
         {
-            return _domainService.ModelToVm(_domainService.GetAll());
+            return _domainService.ModelToVm(_domainService.GetAll(filter));
         }
 
         public Response<CampaignVM> Add(Guid userId, CampaignVM vm)

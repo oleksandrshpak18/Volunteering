@@ -39,9 +39,9 @@ namespace Volunteering.Controllers
 
         [HttpGet("get-all"), AllowAnonymous]
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery]CampaignFilter ?filter)
         {
-            return Ok(_service.GetAll());
+            return Ok(_service.GetAll(filter));
         }
 
         [HttpGet("get-new"), Authorize(Roles = "Admin")]
