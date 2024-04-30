@@ -11,7 +11,7 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public IEnumerable<NewsVM> GetAll()
+        public IEnumerable<CampaignStatusVm> GetAll()
         {
             var res = _domainService.GetAll();
             

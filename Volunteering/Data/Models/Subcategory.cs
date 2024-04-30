@@ -7,6 +7,7 @@ namespace Volunteering.Data.Models
     {
         public Subcategory()
         {
+            Campaigns = new HashSet<Campaign>();
             CategorySubcategories = new HashSet<CategorySubcategory>();
         }
 
@@ -15,6 +16,7 @@ namespace Volunteering.Data.Models
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
+        public virtual ICollection<Campaign> Campaigns { get; set; }
         public virtual ICollection<CategorySubcategory> CategorySubcategories { get; set; }
     }
 }

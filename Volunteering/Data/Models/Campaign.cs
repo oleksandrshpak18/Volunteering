@@ -14,7 +14,7 @@ namespace Volunteering.Data.Models
 
         public Guid CampaignId { get; set; }
         public Guid? ReportId { get; set; }
-        public Guid? CategoryId { get; set; }
+        public Guid? SubcategoryId { get; set; }
         public Guid? CampaignStatusId { get; set; }
         public Guid? CampaignPriorityId { get; set; }
         public string CampaignName { get; set; } = null!;
@@ -29,8 +29,8 @@ namespace Volunteering.Data.Models
 
         public virtual CampaignPriority? CampaignPriority { get; set; }
         public virtual CampaignStatus? CampaignStatus { get; set; }
-        public virtual Category? Category { get; set; }
         public virtual Report? Report { get; set; }
+        public virtual Subcategory? Subcategory { get; set; }
         public virtual ICollection<Donation> Donations { get; set; }
         public virtual ICollection<Payoff> Payoffs { get; set; }
         public virtual ICollection<UserCampaign> UserCampaigns { get; set; }

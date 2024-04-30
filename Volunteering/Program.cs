@@ -27,6 +27,11 @@ builder.Services.AddTransient<NewsApplicationService>();
 builder.Services.AddTransient<UserDomainService>();
 builder.Services.AddTransient<UserApplicationService>();
 
+builder.Services.AddTransient<CampaignStatusDomainService>();
+builder.Services.AddTransient<CampaignStatusApplicationService>();
+builder.Services.AddTransient<CampaignDomainService>();
+builder.Services.AddTransient<CampaignApplicationService>();
+
 // just empty line of code
 
 

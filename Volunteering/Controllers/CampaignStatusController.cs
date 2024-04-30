@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using Volunteering.ApplicationServices;
-using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
-using Volunteering.Helpers;
 
 namespace Volunteering.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NewsController : ControllerBase
+    public class CampaignStatusController : ControllerBase
     {
-        public NewsApplicationService _service;
-        public NewsController(NewsApplicationService service)
+        public CampaignStatusApplicationService _service;
+        public CampaignStatusController(CampaignStatusApplicationService service)
         {
             _service = service;
         }
 
         [HttpGet("get-all"), AllowAnonymous]
-        [ProducesResponseType(typeof(List<NewsVM>), 200)] 
+        [ProducesResponseType(typeof(List<CampaignStatusVm>), 200)]
         public IActionResult GetAll()
         {
             return Ok(_service.GetAll());
@@ -28,29 +25,23 @@ namespace Volunteering.Controllers
 
         [HttpPost("add"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(CampaignStatusVm), 200)]
-        [Consumes("multipart/form-data")]
-        public IActionResult Add([FromForm] NewsVM vm)
-        {
-            Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
-
+        public IActionResult Add([FromBody] CampaignStatusVm vm)
+        { 
             if (ModelState.IsValid)
             {
-                return Ok(_service.Add(userId, vm));
+                return Ok(_service.Add(vm));
             }
             return BadRequest();
         }
 
         [HttpPut("update"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(CampaignStatusVm), 200)]
-        [Consumes("multipart/form-data")]
-        public IActionResult Update([FromForm] NewsVM vm)
+        public IActionResult Update([FromBody] CampaignStatusVm vm)
         {
             if (ModelState.IsValid)
-            {
-                Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
-
-                var res = _service.Update(userId, vm);
-                if(res != null)
+            { 
+                var res = _service.Update(vm);
+                if (res != null)
                 {
                     return Ok(res);
                 }
@@ -60,6 +51,22 @@ namespace Volunteering.Controllers
                 }
             }
             return BadRequest();
+        }
+
+        [HttpDelete("delete"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(bool), 200)]
+        public IActionResult Delete([FromBody] CampaignStatusVm vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = _service.Delete(vm);
+                if (res)
+                {
+                    return NoContent();
+                }
+                return NotFound();
+            }
+            return BadRequest(ModelState);
         }
     }
 }

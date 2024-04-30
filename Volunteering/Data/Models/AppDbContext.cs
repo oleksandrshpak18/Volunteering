@@ -32,6 +32,14 @@ namespace Volunteering.Data.Models
         public virtual DbSet<UserCampaign> UserCampaigns { get; set; } = null!;
         public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnectionString");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseCollation("Cyrillic_General_CI_AS");
@@ -72,15 +80,15 @@ namespace Volunteering.Data.Models
                     .HasForeignKey(d => d.CampaignStatusId)
                     .HasConstraintName("FK__Campaign__Campai__6B24EA82");
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Campaigns)
-                    .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Campaign__Catego__6A30C649");
-
                 entity.HasOne(d => d.Report)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.ReportId)
                     .HasConstraintName("FK__Campaign__Report__693CA210");
+
+                entity.HasOne(d => d.Subcategory)
+                    .WithMany(p => p.Campaigns)
+                    .HasForeignKey(d => d.SubcategoryId)
+                    .HasConstraintName("FK__Campaign__Subcat__6A30C649");
             });
 
             modelBuilder.Entity<CampaignPriority>(entity =>
@@ -107,6 +115,8 @@ namespace Volunteering.Data.Models
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.StatusDescription).HasMaxLength(256);
 
                 entity.Property(e => e.StatusName).HasMaxLength(256);
 

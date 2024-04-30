@@ -12,6 +12,7 @@ namespace Volunteering.Data.Models
 
         public Guid CampaignStatusId { get; set; }
         public string StatusName { get; set; } = null!;
+        public string StatusDescription { get; set; } = null!;
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 

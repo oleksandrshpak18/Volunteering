@@ -60,11 +60,10 @@ namespace Volunteering.Helpers
                 {
                     var list = new CampaignStatus[]
                     {
-                        new CampaignStatus { StatusName = "Новий" },
-                        new CampaignStatus { StatusName = "Перевірений"},
-                        new CampaignStatus { StatusName = "Триває" },
-                        new CampaignStatus { StatusName = "Очікується звіт" },
-                        new CampaignStatus { StatusName = "Завершений"}
+                        new CampaignStatus { StatusName = "Новий", StatusDescription = "Збір створено, і він очікує підтвердження від адміністрації" },
+                        new CampaignStatus { StatusName = "Триває", StatusDescription = "Збір активний, і його було переврено адміністратором" },
+                        new CampaignStatus { StatusName = "Очікується звіт" , StatusDescription = "Кошти було зібрано, і ми очікуємо звіт від автора збору"},
+                        new CampaignStatus { StatusName = "Завершений", StatusDescription = "Цей збір вже не активний. Дякуюємо за допомогу!" }
                     };
 
                     foreach (var r in list)
