@@ -1,5 +1,6 @@
 ﻿using Volunteering.Data.DomainServices;
 using Volunteering.Data.ViewModels;
+using Volunteering.Helpers;
 
 namespace Volunteering.ApplicationServices
 {
@@ -11,17 +12,39 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public IEnumerable<CampaignStatusVm> GetAll()
+        public IEnumerable<CampaignVM> GetAll()
         {
-            var res = _domainService.GetAll();
-            
-            return null;
+            return _domainService.ModelToVm(_domainService.GetAll());
         }
 
-        public CampaignVM? Add(Guid userId, CampaignVM vm)
+        public Response<CampaignVM> Add(Guid userId, CampaignVM vm)
         {
-            //var res = _domainService.Add(userId, vm);
-            return null;
+            vm.UserId = userId;
+
+            try
+            {
+                var res = _domainService.Add(vm);
+                if (res != null)
+                {
+                    var campaignVM = _domainService.ModelToVm(res);
+                    return new Response<CampaignVM>
+                    {
+                        Data = campaignVM
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<CampaignVM>
+                {
+                    Error = ex.Message
+                };
+            }
+
+            return new Response<CampaignVM>
+            {
+                Error = "Unknown error or campaign could not be created."
+            };
         }
     }
 }

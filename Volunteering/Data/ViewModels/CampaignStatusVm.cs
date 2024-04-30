@@ -4,7 +4,6 @@ namespace Volunteering.Data.ViewModels
 {
     public class CampaignStatusVm
     {
-        [Required]
         public Guid? CampaignStatusId { get; set; }
         [Required]
         public string StatusName { get; set; } = null!;

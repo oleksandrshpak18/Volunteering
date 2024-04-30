@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volunteering.ApplicationServices;
+using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
 
 namespace Volunteering.Controllers
@@ -22,11 +23,16 @@ namespace Volunteering.Controllers
         public IActionResult Add([FromForm] CampaignVM vm)
         {
             Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
-
+            var response = _service.Add(userId, vm);
             if (ModelState.IsValid)
             {
-                return Ok(_service.Add(userId, vm));
+                if (!response.IsSuccess)
+                {
+                    return BadRequest(response.Error);
+                }
+                return Ok(response.Data);
             }
+
             return BadRequest();
         }
 
