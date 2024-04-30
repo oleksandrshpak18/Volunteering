@@ -48,5 +48,15 @@ namespace Volunteering.Data.DomainServices
             _context.SaveChanges();
             return res;
         }
+
+        public News? Get(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(NewsVM obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

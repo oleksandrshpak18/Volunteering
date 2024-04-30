@@ -20,6 +20,11 @@ namespace Volunteering.Data.DomainServices
 
         public CampaignStatus VmToModel(CampaignStatusVm vm) => _mapper.Map<CampaignStatus>(vm);
 
+        public CampaignStatus? Get(Guid id)
+        {
+            return _context.CampaignStatuses.Find(id);
+        }
+
         public IEnumerable<CampaignStatus> GetAll()
         {
             return _context.CampaignStatuses.ToList();

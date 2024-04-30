@@ -10,6 +10,9 @@ namespace Volunteering.Data.Mapping
         {
             CreateMap<CampaignStatus, CampaignStatusVm>();
             CreateMap<CampaignStatusVm, CampaignStatus>();
+
+            CreateMap<CampaignPriority, CampaignPriorityVm>();
+            CreateMap<CampaignPriorityVm, CampaignPriority>();
         }
     }
 }

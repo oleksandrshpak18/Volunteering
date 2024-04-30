@@ -29,6 +29,8 @@ builder.Services.AddTransient<UserApplicationService>();
 
 builder.Services.AddTransient<CampaignStatusDomainService>();
 builder.Services.AddTransient<CampaignStatusApplicationService>();
+builder.Services.AddTransient<CampaignPriorityDomainService>();
+builder.Services.AddTransient<CampaignPriorityApplicationService>();
 builder.Services.AddTransient<CampaignDomainService>();
 builder.Services.AddTransient<CampaignApplicationService>();
 
