@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Volunteering.Data.Interfaces;
 using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
+using Volunteering.Helpers;
 
 namespace Volunteering.Data.DomainServices
 {
-    public class CampaignDomainService : IDomainService<CampaignVM, Campaign>
+    public class CampaignDomainService 
     {
         private AppDbContext _context;
         private readonly IMapper _mapper;
@@ -59,18 +61,39 @@ namespace Volunteering.Data.DomainServices
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Campaign> GetAll()
+        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null)
         {
-            return _context.Campaigns
-                .Include(c => c.UserCampaigns)
-                    .ThenInclude(c => c.User)
-                .Include(c => c.Subcategory)
-                    .ThenInclude(c => c.CategorySubcategories)
-                        .ThenInclude(c => c.Category)
+            var query = _context.Campaigns
+                .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
+                .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
-                .ToList();
+                .AsQueryable(); 
+
+            if (filter != null)
+            {
+                // Filtering by Category
+                if (!string.IsNullOrEmpty(filter.Category))
+                {
+                    query = query.Where(c => c.Subcategory.CategorySubcategories.Any(cs => cs.Category.CategoryName == filter.Category));
+                }
+
+                // Filtering by Priority
+                if (filter.Priority.HasValue)
+                {
+                    query = query.Where(c => c.CampaignPriority.PriorityValue == filter.Priority);
+                }
+
+                // Filtering by Status
+                if (!string.IsNullOrEmpty(filter.Status))
+                {
+                    query = query.Where(c => c.CampaignStatus.StatusName == filter.Status);
+                }
+            }
+
+            return query.ToList(); 
         }
+
 
         public Campaign Update(CampaignVM obj)
         {
@@ -80,6 +103,17 @@ namespace Volunteering.Data.DomainServices
         public bool Delete(CampaignVM obj)
         {
             throw new NotImplementedException();
+        }
+
+        public Campaign? UpdateStatus(CampaignStatusUpdateRequest req)
+        {
+            var res = _context.Campaigns.Find(req.StatusId);
+            if (res == null) return null;
+            var status = _context.CampaignStatuses.FirstOrDefault(x => x.StatusName.Equals(req.NewStatus));
+            if (status == null) return null;
+            res.CampaignStatus = status;
+            _context.SaveChanges();
+            return res;
         }
     }
 }

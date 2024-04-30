@@ -78,7 +78,7 @@ namespace Volunteering.Controllers
             return Ok(res);    
         }
 
-        [HttpPut("update"), Authorize(Roles = "Registered")]
+        [HttpPatch("update"), Authorize(Roles = "Registered")]
         [ProducesResponseType(typeof(UserVM), 200)]
         public IActionResult Update([FromForm]UserDetailsVM user)
         {

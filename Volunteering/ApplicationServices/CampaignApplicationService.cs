@@ -46,5 +46,21 @@ namespace Volunteering.ApplicationServices
                 Error = "Unknown error or campaign could not be created."
             };
         }
+
+        public IEnumerable<CampaignVM>? GetNew()
+        {
+            var filter = new CampaignFilter
+            {
+                Status = "Новий"
+            };
+
+            return _domainService.ModelToVm(_domainService.GetAll(filter));
+        }
+
+        public bool UpdateStatus(CampaignStatusUpdateRequest req)
+        {
+            var res = _domainService.UpdateStatus(req);
+            return res != null;
+        }
     }
 }

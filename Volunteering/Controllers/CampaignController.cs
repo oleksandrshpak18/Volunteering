@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volunteering.ApplicationServices;
 using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
+using Volunteering.Helpers;
 
 namespace Volunteering.Controllers
 {
@@ -41,6 +42,30 @@ namespace Volunteering.Controllers
         public IActionResult GetAll()
         {
             return Ok(_service.GetAll());
+        }
+
+        [HttpGet("get-new"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<CampaignVM>), 200)]
+        public IActionResult GetNew()
+        {
+            return Ok(_service.GetNew());
+        }
+
+        [HttpPatch("update-status"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(bool), 200)]
+        public IActionResult UpdateStatus([FromBody]CampaignStatusUpdateRequest req)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                var res = _service.UpdateStatus(req);
+                if(res)
+                {
+                    return Ok(res);
+                }
+                return NotFound();
+            }
+            return BadRequest();
         }
     }
 }
