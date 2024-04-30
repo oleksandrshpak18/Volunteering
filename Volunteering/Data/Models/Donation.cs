@@ -9,7 +9,7 @@ namespace Volunteering.Data.Models
         public Guid? UserId { get; set; }
         public Guid? CampaignId { get; set; }
         public decimal? DonationValue { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual Campaign? Campaign { get; set; }

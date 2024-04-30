@@ -10,7 +10,7 @@ namespace Volunteering.Data.Models
         public string NewsTitle { get; set; } = null!;
         public string NewsText { get; set; } = null!;
         public byte[]? NewsPhoto { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual User? User { get; set; }

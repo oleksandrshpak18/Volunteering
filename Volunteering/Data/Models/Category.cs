@@ -13,7 +13,7 @@ namespace Volunteering.Data.Models
 
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; } = null!;
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual ICollection<Campaign> Campaigns { get; set; }

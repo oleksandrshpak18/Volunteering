@@ -65,22 +65,22 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.CampaignPriority)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.CampaignPriorityId)
-                    .HasConstraintName("FK__Campaign__Campai__6B24EA82");
+                    .HasConstraintName("FK__Campaign__Campai__6C190EBB");
 
                 entity.HasOne(d => d.CampaignStatus)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.CampaignStatusId)
-                    .HasConstraintName("FK__Campaign__Campai__6A30C649");
+                    .HasConstraintName("FK__Campaign__Campai__6B24EA82");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Campaign__Catego__693CA210");
+                    .HasConstraintName("FK__Campaign__Catego__6A30C649");
 
                 entity.HasOne(d => d.Report)
                     .WithMany(p => p.Campaigns)
                     .HasForeignKey(d => d.ReportId)
-                    .HasConstraintName("FK__Campaign__Report__68487DD7");
+                    .HasConstraintName("FK__Campaign__Report__693CA210");
             });
 
             modelBuilder.Entity<CampaignPriority>(entity =>
@@ -143,12 +143,12 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.CategorySubcategories)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__CategoryS__Categ__4D94879B");
+                    .HasConstraintName("FK__CategoryS__Categ__4E88ABD4");
 
                 entity.HasOne(d => d.Subcategory)
                     .WithMany(p => p.CategorySubcategories)
                     .HasForeignKey(d => d.SubcategoryId)
-                    .HasConstraintName("FK__CategoryS__Subca__4E88ABD4");
+                    .HasConstraintName("FK__CategoryS__Subca__4F7CD00D");
             });
 
             modelBuilder.Entity<Donation>(entity =>
@@ -168,12 +168,12 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Campaign)
                     .WithMany(p => p.Donations)
                     .HasForeignKey(d => d.CampaignId)
-                    .HasConstraintName("FK__Donation__Campai__778AC167");
+                    .HasConstraintName("FK__Donation__Campai__787EE5A0");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Donations)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Donation__UserId__76969D2E");
+                    .HasConstraintName("FK__Donation__UserId__778AC167");
             });
 
             modelBuilder.Entity<News>(entity =>
@@ -191,7 +191,7 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__News__UserId__412EB0B6");
+                    .HasConstraintName("FK__News__UserId__4222D4EF");
             });
 
             modelBuilder.Entity<Payoff>(entity =>
@@ -218,7 +218,7 @@ namespace Volunteering.Data.Models
                     .WithMany(p => p.Payoffs)
                     .HasForeignKey(d => d.CampaignId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Payoff__Campaign__7C4F7684");
+                    .HasConstraintName("FK__Payoff__Campaign__7D439ABD");
             });
 
             modelBuilder.Entity<Report>(entity =>
@@ -266,12 +266,12 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Report)
                     .WithMany(p => p.ReportReportPhotos)
                     .HasForeignKey(d => d.ReportId)
-                    .HasConstraintName("FK__ReportRep__Repor__5EBF139D");
+                    .HasConstraintName("FK__ReportRep__Repor__5FB337D6");
 
                 entity.HasOne(d => d.ReportPhoto)
                     .WithMany(p => p.ReportReportPhotos)
                     .HasForeignKey(d => d.ReportPhotoId)
-                    .HasConstraintName("FK__ReportRep__Repor__5FB337D6");
+                    .HasConstraintName("FK__ReportRep__Repor__60A75C0F");
             });
 
             modelBuilder.Entity<Subcategory>(entity =>
@@ -311,6 +311,8 @@ namespace Volunteering.Data.Models
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(20);
 
+                entity.Property(e => e.Rating).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Speciality).HasMaxLength(255);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
@@ -342,12 +344,12 @@ namespace Volunteering.Data.Models
                 entity.HasOne(d => d.Campaign)
                     .WithMany(p => p.UserCampaigns)
                     .HasForeignKey(d => d.CampaignId)
-                    .HasConstraintName("FK__UserCampa__Campa__71D1E811");
+                    .HasConstraintName("FK__UserCampa__Campa__72C60C4A");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserCampaigns)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__UserCampa__UserI__70DDC3D8");
+                    .HasConstraintName("FK__UserCampa__UserI__71D1E811");
             });
 
             modelBuilder.Entity<UserRole>(entity =>

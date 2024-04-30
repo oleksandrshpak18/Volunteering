@@ -29,42 +29,30 @@ namespace Volunteering.Data.DomainServices
             _mapper = mapper;
         }
 
-        public User Register(UserRegisterRequest obj) 
+        public UserVM ModelToVm(User user) => _mapper.Map<UserVM>(user);
+       
+        public List<UserVM> ModelToVm(IEnumerable<User> userList) => _mapper.Map<List<UserVM>>(userList);
+        
+        public User VmToModel(UserVM vm) => _mapper.Map<User>(vm);
+        
+        public User RegisterVmToModel(UserRegisterRequest vm) => _mapper.Map<User>(vm);
+
+        public User Add(UserRegisterRequest obj) 
         {
             if(obj == null) { throw new ArgumentNullException(nameof(obj)); }
 
-            User newUser = new User()
-            { 
-                UserRole = _context.UserRoles.FirstOrDefault(x => x.UserRoleName.Equals("Registered")),
-                UserName = obj.UserName,
-                UserSurname = obj.UserSurname,
-                UserPhoto = ImageProcessor.ImageToByte(obj.UserPhoto),
-                Email = obj.Email,
-                Password = HashProcessor.HashPassword(obj.Password),
-                Rating = 0
-            };
-
-            _context.Users.Add(newUser);
+            User res = RegisterVmToModel(obj);
+            res.UserRole = _context.UserRoles.FirstOrDefault(x => x.UserRoleName.Equals("Registered"));
+            _context.Users.Add(res);
             _context.SaveChanges();
 
-            return newUser;
+            return res;
         }
 
         public bool VerifyPassword(User existingUser, string enteredPassword)
         {
             return HashProcessor.VerifyPassword(existingUser.Password, enteredPassword);
         }
-        //private static string HashPassword(string password)
-        //{
-        //    return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
-        //}
-
-        //public bool VerifyPassword(User? user, string enteredPassword)
-        //{
-        //    if (user == null) return false;
-        //    return BCrypt.Net.BCrypt.Verify(enteredPassword, user?.Password);
-        //}
-
         public string GenerateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -102,41 +90,11 @@ namespace Volunteering.Data.DomainServices
                 }
             }
             return null;
-        }   
-
-        //public UserVM ModelToVm(User user)
-        //{
-        //    return _mapper.Map<UserVM>(user);
-        //}
-        //public List<UserVM> ModelToVm(List<User> userList)
-        //{
-        //    return _mapper.Map<List<UserVM>>(userList);
-        //}
-
-        public UserVM ConvertToVm(User obj)
-        {
-            return new UserVM()
-            {
-                UserId = obj.UserId,
-                UserName = obj.UserName,
-                UserSurname = obj.UserSurname,
-                City = obj.City,
-                Organisation = obj.Organisation,
-                Speciality = obj.Speciality,
-                UserPhotoBase64 = ImageProcessor.ByteToBase64(obj.UserPhoto),
-                DateJoined = obj.CreateDate?.ToString("yyyy-MM-dd"),
-                Rating = obj.Rating
-            };
         }
 
         public IEnumerable<User> GetAll()
         {
             return _context.Users.ToList();
-        }
-
-        public float GetRating(int userId)
-        {
-            throw new NotImplementedException("Get rating is not implemented yet.");
         }
 
         public bool? IsInfoFilled(Guid userId)
@@ -157,24 +115,13 @@ namespace Volunteering.Data.DomainServices
                 && user.UserName != null
                 && user.UserSurname != null;
         }
-
-        public User? Update (Guid userId, UserDetailsVM newUser)
+        
+        public User? Update (UserDetailsVM newUser)
         {
-            User? user = _context.Users.Find(userId);
-
-            if (user != null)
-            {
-                user.PhoneNumber = newUser.PhoneNumber;
-                user.Organisation = newUser.Organisation;
-                user.Speciality = newUser.Speciality;
-                user.City = newUser.City;
-                user.UserPhotoPassport = ImageProcessor.ImageToByte(newUser.UserPhotoPassport);
-                user.CardNumber = newUser.CardNumber;
-
-                _context.SaveChanges();
-            }
-
-            return user;
+            User? res = _context.Users.Find(newUser.UserId);
+            _mapper.Map(newUser, res);
+            _context.SaveChanges();
+            return res;
         }
     }
 }

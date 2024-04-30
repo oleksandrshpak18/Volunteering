@@ -12,7 +12,7 @@ namespace Volunteering.Data.Models
 
         public Guid SubcategoryId { get; set; }
         public string SubcategoryName { get; set; } = null!;
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual ICollection<CategorySubcategory> CategorySubcategories { get; set; }

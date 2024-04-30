@@ -27,7 +27,7 @@ namespace Volunteering.Data.Models
         public string? City { get; set; }
         public string? UserDescription { get; set; }
         public float? Rating { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual UserRole? UserRole { get; set; }

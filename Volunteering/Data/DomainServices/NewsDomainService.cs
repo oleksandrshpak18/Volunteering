@@ -20,21 +20,22 @@ namespace Volunteering.Data.DomainServices
             _context = context;
             _mapper = mapper;
         }
+        public NewsVM ModelToVm(News news) => _mapper.Map<NewsVM>(news);
+
+        public List<NewsVM> ModelToVm(IEnumerable<News> newsList) => _mapper.Map<List<NewsVM>>(newsList);
+
+        public News VmToModel(NewsVM vm) => _mapper.Map<News>(vm);
+
         public IEnumerable<News> GetAll()
         {
             return _context.News
                  .Include(n => n.User)
                  .ToList();
         }
-        public NewsVM ModelToVm(News news) => _mapper.Map<NewsVM>(news);
-    
-        public List<NewsVM> ModelToVm(IEnumerable<News> newsList) => _mapper.Map<List<NewsVM>>(newsList);
-        
-        public News VmToModel(NewsVM vm) => _mapper.Map<News>(vm);
 
         public News Add(NewsVM obj)
         {
-            News res = _mapper.Map<News>(obj);
+            News res = VmToModel(obj);
             _context.News.Add(res);
             _context.SaveChanges();
             return res;

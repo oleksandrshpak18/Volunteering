@@ -5,6 +5,7 @@ namespace Volunteering.Data.ViewModels
 {
     public class UserDetailsVM
     {
+        public Guid UserId { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
@@ -18,5 +19,7 @@ namespace Volunteering.Data.ViewModels
         [Required]
         [FromForm(Name = "UserPhotoPassport")]
         public IFormFile UserPhotoPassport { get; set; }
+        
+        public string ?UserDescription {  get; set; }
     }
 }

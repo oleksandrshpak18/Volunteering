@@ -27,11 +27,11 @@ namespace Volunteering.ApplicationServices
                         "Email already exists"
                     }
                 };
-            }
+            } 
 
             try
             {
-                User user = _domainService.Register(vm);
+                User user = _domainService.Add(vm);
 
                 if (user != null)
                 {
@@ -78,7 +78,7 @@ namespace Volunteering.ApplicationServices
                     Result = false,
                     Errors = new List<string>()
                     {
-                        $"Email: {vm.Email}. Invalid payload"
+                        "Invalid payload"
                     }
                 };
             }
@@ -108,26 +108,26 @@ namespace Volunteering.ApplicationServices
         }
         public IEnumerable<UserVM> GetAll()
         {
-            // return _domainService.ModelToVm(_domainService.GetAll());
-            return _domainService.GetAll().Select(x => _domainService.ConvertToVm(x));
+            return _domainService.ModelToVm(_domainService.GetAll());
+            //return _domainService.GetAll().Select(x => _domainService.ConvertToVm(x));
         }
 
         public bool ?IsInfoFilled(Guid userId)
         {
             return _domainService.IsInfoFilled(userId);
         }
-
+        
         public UserVM Update(Guid userId, UserDetailsVM user)
         {
-            var res = _domainService.Update(userId, user);
-
+            user.UserId = userId;
+            var res = _domainService.Update(user);
             if (res == null)
             {
                 return null;
             }
 
-            //return _domainService.ModelToVm(res);
-            return _domainService.ConvertToVm(res);
+            return _domainService.ModelToVm(res);
+            //return _domainService.ConvertToVm(res);
         }
     }
 }

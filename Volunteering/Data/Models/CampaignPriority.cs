@@ -13,7 +13,7 @@ namespace Volunteering.Data.Models
         public Guid CampaignPriorityId { get; set; }
         public byte PriorityValue { get; set; }
         public string PriorityDescription { get; set; } = null!;
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual ICollection<Campaign> Campaigns { get; set; }

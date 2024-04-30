@@ -12,7 +12,7 @@ namespace Volunteering.Data.Models
 
         public Guid ReportPhotoId { get; set; }
         public byte[] Photo { get; set; } = null!;
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual ICollection<ReportReportPhoto> ReportReportPhotos { get; set; }

@@ -24,7 +24,7 @@ namespace Volunteering.Data.Models
         public decimal CampaignGoal { get; set; }
         public decimal? Accumulated { get; set; }
         public DateTime FinishDate { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual CampaignPriority? CampaignPriority { get; set; }

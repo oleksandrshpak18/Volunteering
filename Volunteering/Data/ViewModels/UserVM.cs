@@ -7,9 +7,9 @@ namespace Volunteering.Data.ViewModels
     public class UserVM
     {
         public Guid? UserId { get; set; }
-        [Required]
+        
         public string UserName { get; set; } = null!;
-        [Required]
+        
         public string UserSurname { get; set; } = null!;
 
         [FromForm(Name ="UserPhoto")]
@@ -19,9 +19,9 @@ namespace Volunteering.Data.ViewModels
         [FromForm(Name = "UserPhotoPassport")]
         public IFormFile? UserPhotoPassport { get; set; }
         public string? UserPhotoPassportBase64 { get; set; }
-        [Required]
+        
         public string Email { get; set; } = null!;
-        [Required]
+        
         public string ?Password { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Organisation { get; set; }
@@ -30,6 +30,7 @@ namespace Volunteering.Data.ViewModels
         public string? City { get; set; }
         public string? DateJoined { get; set; }
         public float? Rating { get; set; }
+        public string? UserDescriptioin { get; set; }
         
     }
 }

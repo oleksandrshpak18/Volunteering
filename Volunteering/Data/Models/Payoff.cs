@@ -11,7 +11,7 @@ namespace Volunteering.Data.Models
         public string RecipientSurname { get; set; } = null!;
         public string RecippientCardNumber { get; set; } = null!;
         public decimal PayoffValue { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
         public virtual Campaign Campaign { get; set; } = null!;
