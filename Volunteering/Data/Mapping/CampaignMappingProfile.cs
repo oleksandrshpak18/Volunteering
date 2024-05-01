@@ -13,6 +13,7 @@ namespace Volunteering.Data.Mapping
                 .ForMember(dest => dest.CampaignPhotoBase64, opt => opt.MapFrom(src => ImageProcessor.ByteToBase64(src.CampaignPhoto)))
                 .ForMember(dest => dest.CampaignPhoto, opt => opt.Ignore())
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
+                .ForMember(dest => dest.CreateDateString, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
                 .ForMember(dest => dest.FinishDate, opt => opt.MapFrom(src => src.FinishDate.ToString("yyyy-MM-dd")))
                 .ForMember(dest => dest.CampaignStatus, opt => opt.MapFrom(src => src.CampaignStatus.StatusName))
                 .ForMember(dest => dest.CampaignPriority, opt => opt.MapFrom(src => src.CampaignPriority.PriorityValue))

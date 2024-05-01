@@ -130,12 +130,14 @@ namespace Volunteering.Data.DomainServices
         public List<UserShortInfoVM> GetTop(int count = 5)
         {
             var topUsers = _context.Users
+                .Where(x => x.UserRole.UserRoleName != "Admin")
                 .Select(u => new UserShortInfoVM
                 {
                     UserId = u.UserId,
                     FullName = $"{u.UserName} {u.UserSurname}", // Concatenate names
                     Accumulated = u.UserCampaigns.Sum(c => c.Campaign.Accumulated ?? 0), // Pre-compute accumulated sum
-                    ReportCount = u.UserCampaigns.Select(c => c.Campaign).Where(y => y.Report != null).Count() // Count the number of reports
+                    ReportCount = u.UserCampaigns.Select(c => c.Campaign).Where(y => y.Report != null).Count(), // Count the number of reports
+                    UserPhotoBase64 = ImageProcessor.ByteToBase64(u.UserPhoto)
                 })
                 .OrderByDescending(u => u.Accumulated) // Order by accumulated sum descending
                 .Take(count) // Take the specified number of users

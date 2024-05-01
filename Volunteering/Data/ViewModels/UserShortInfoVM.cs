@@ -6,5 +6,6 @@
         public string FullName { get; set; }
         public decimal Accumulated {  get; set; }
         public int ReportCount { get; set; }
+        public string UserPhotoBase64 { get; set; }
     }
 }

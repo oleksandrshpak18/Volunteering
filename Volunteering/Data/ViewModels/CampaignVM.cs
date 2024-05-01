@@ -24,5 +24,6 @@ namespace Volunteering.Data.ViewModels
         public decimal? Accumulated { get; set; }
         public DateTime FinishDate { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string ?CreateDateString { get; set; }
     }
 }
