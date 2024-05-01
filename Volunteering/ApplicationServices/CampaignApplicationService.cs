@@ -12,9 +12,10 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public IEnumerable<CampaignVM> GetAll(CampaignFilter ?filter)
+        public IEnumerable<CampaignVM> GetAll(CampaignFilter ?filter, string? sortBy, bool ?isDescending)
         {
-            return _domainService.ModelToVm(_domainService.GetAll(filter));
+            if(isDescending != null) { return _domainService.ModelToVm(_domainService.GetAll(filter, sortBy, isDescending.Value)); }
+            return _domainService.ModelToVm(_domainService.GetAll(filter, sortBy));
         }
 
         public Response<CampaignVM> Add(Guid userId, CampaignVM vm)
@@ -61,6 +62,11 @@ namespace Volunteering.ApplicationServices
         {
             var res = _domainService.UpdateStatus(req);
             return res != null;
+        }
+
+        public IEnumerable<CampaignVM> GetRecent()
+        {
+            return _domainService.ModelToVm(_domainService.GetRecent());
         }
     }
 }

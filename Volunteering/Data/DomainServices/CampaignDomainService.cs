@@ -61,7 +61,7 @@ namespace Volunteering.Data.DomainServices
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null)
+        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true)
         {
             var query = _context.Campaigns
                 .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
@@ -72,26 +72,45 @@ namespace Volunteering.Data.DomainServices
 
             if (filter != null)
             {
-                // Filtering by Category
                 if (!string.IsNullOrEmpty(filter.Category))
                 {
                     query = query.Where(c => c.Subcategory.CategorySubcategories.Any(cs => cs.Category.CategoryName == filter.Category));
                 }
 
-                // Filtering by Priority
                 if (filter.Priority.HasValue)
                 {
                     query = query.Where(c => c.CampaignPriority.PriorityValue == filter.Priority);
                 }
 
-                // Filtering by Status
                 if (!string.IsNullOrEmpty(filter.Status))
                 {
                     query = query.Where(c => c.CampaignStatus.StatusName == filter.Status);
                 }
             }
 
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                query = ApplySorting(query, sortBy, isDescending);
+            }
+
             return query.ToList(); 
+        }
+
+        private IQueryable<Campaign> ApplySorting(IQueryable<Campaign> query, string sortBy, bool descending)
+        {
+            switch (sortBy.ToLower())
+            {
+                case "createdate":
+                    return descending ? query.OrderByDescending(c => c.CreateDate) : query.OrderBy(c => c.CreateDate);
+                case "finishdate":
+                    return descending ? query.OrderByDescending(c => c.FinishDate) : query.OrderBy(c => c.FinishDate);
+                case "priority": // value 1 is considered bigger than 2 3 4 etc in our domain
+                    return !descending ? query.OrderByDescending(c => c.CampaignPriority.PriorityValue) : query.OrderBy(c => c.CampaignPriority.PriorityValue);
+                case "remaining":
+                    return descending ? query.OrderByDescending(c => c.CampaignGoal - c.Accumulated) : query.OrderBy(c => c.CampaignGoal - c.Accumulated);
+                default:
+                    return query; 
+            }
         }
 
 
@@ -114,6 +133,18 @@ namespace Volunteering.Data.DomainServices
             res.CampaignStatus = status;
             _context.SaveChanges();
             return res;
+        }
+
+        public IEnumerable<Campaign> GetRecent(int count = 4)
+        {
+            return _context.Campaigns
+                .OrderByDescending(c => c.CreateDate) 
+                .Take(count) 
+                .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
+                .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
+                .Include(c => c.CampaignPriority)
+                .Include(c => c.CampaignStatus)
+                .ToList(); 
         }
     }
 }
