@@ -64,6 +64,13 @@ namespace Volunteering.Controllers
             return Ok(_service.GetAll());
         }
 
+        [HttpGet("get-top"), AllowAnonymous]
+        [ProducesResponseType(typeof(List<UserShortInfoVM>), 200)]
+        public IActionResult GetTop()
+        {
+            return Ok(_service.GetTop());
+        }
+
         [HttpGet("is-info-filled"), Authorize(Roles = "Registered")]
         [ProducesResponseType(typeof(Boolean), 200)]
         public IActionResult IsInfoFiled()

@@ -14,6 +14,7 @@ using Volunteering.Helpers;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace Volunteering.Data.DomainServices
 {
@@ -30,7 +31,9 @@ namespace Volunteering.Data.DomainServices
         }
 
         public UserVM ModelToVm(User user) => _mapper.Map<UserVM>(user);
-       
+
+        //public IEnumerable<UserShortInfoVM> ModelToShortVm(IEnumerable<User> userList) => _mapper.Map<List<UserShortInfoVM>>(userList);
+
         public List<UserVM> ModelToVm(IEnumerable<User> userList) => _mapper.Map<List<UserVM>>(userList);
         
         public User VmToModel(UserVM vm) => _mapper.Map<User>(vm);
@@ -122,6 +125,23 @@ namespace Volunteering.Data.DomainServices
             _mapper.Map(newUser, res);
             _context.SaveChanges();
             return res;
+        }
+
+        public List<UserShortInfoVM> GetTop(int count = 5)
+        {
+            var topUsers = _context.Users
+                .Select(u => new UserShortInfoVM
+                {
+                    UserId = u.UserId,
+                    FullName = $"{u.UserName} {u.UserSurname}", // Concatenate names
+                    Accumulated = u.UserCampaigns.Sum(c => c.Campaign.Accumulated ?? 0), // Pre-compute accumulated sum
+                    ReportCount = u.UserCampaigns.Select(c => c.Campaign).Where(y => y.Report != null).Count() // Count the number of reports
+                })
+                .OrderByDescending(u => u.Accumulated) // Order by accumulated sum descending
+                .Take(count) // Take the specified number of users
+                .ToList();
+
+            return topUsers; // Return the precomputed list
         }
     }
 }
