@@ -68,5 +68,11 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.ModelToVm(_domainService.GetRecent());
         }
+
+        public CampaignVM AddReport(Guid userId, ReportVM vm)
+        {
+
+            return _domainService.ModelToVm(_domainService.AddReport(userId, vm));
+        }
     }
 }

@@ -68,6 +68,7 @@ namespace Volunteering.Data.DomainServices
                 .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
+                .Include(c => c.Report)
                 .AsQueryable(); 
 
             if (filter != null)
@@ -144,7 +145,52 @@ namespace Volunteering.Data.DomainServices
                 .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
+                .Include(c => c.Report).ThenInclude(x => x.ReportReportPhotos).ThenInclude(y => y.ReportPhoto)
                 .ToList(); 
+        }
+
+        public Campaign AddReport(Guid userId, ReportVM vm)
+        {
+            var res = _context.Campaigns
+
+                .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
+                .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
+                .Include(c => c.CampaignPriority)
+                .Include(c => c.CampaignStatus)
+                .Include(c => c.Report)
+                .FirstOrDefault(c => c.CampaignId == vm.CampaignId);
+
+            if (res == null)
+            {
+                return null;
+            }
+            if(res.UserCampaigns.First().User.UserId != userId)
+            {
+                return null;
+            }
+            if(res.Report != null)
+            {
+                return null; 
+            }
+
+            res.Report = new Report()
+            {
+                ReportName = vm.ReportName,
+                ReportDescription = vm.ReportDescription,
+                ReportReportPhotos = vm.ReportPhotos?
+                    .Select(p => new ReportReportPhoto
+                    {
+                        ReportId = vm.ReportId,
+                        ReportPhoto = new ReportPhoto
+                        {
+                            Photo = ImageProcessor.ImageToByte(p)
+                        }
+                    }).ToList() ?? new List<ReportReportPhoto>()
+            };
+
+            _context.SaveChanges();
+            return res;
+                
         }
     }
 }

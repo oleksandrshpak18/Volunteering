@@ -41,7 +41,6 @@ namespace Volunteering.Controllers
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
         public IActionResult GetAll([FromQuery]CampaignFilter ?filter, string? sortBy, bool? isDescending)
         {
-            var str = "hell";
             return Ok(_service.GetAll(filter, sortBy, isDescending));
         }
 
@@ -68,6 +67,26 @@ namespace Volunteering.Controllers
             {
                 var res = _service.UpdateStatus(req);
                 if(res)
+                {
+                    return Ok(res);
+                }
+                return NotFound();
+            }
+            return BadRequest();
+        }
+
+        [HttpPatch("add-report"), Authorize(Roles = "Registered")]
+        [ProducesResponseType(typeof(CampaignVM), 200)]
+        [Consumes("multipart/form-data")]
+        public IActionResult AddReport([FromForm] ReportVM vm)
+        {
+
+            if (ModelState.IsValid)
+            {
+                Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+
+                var res = _service.AddReport(userId, vm);
+                if (res != null)
                 {
                     return Ok(res);
                 }

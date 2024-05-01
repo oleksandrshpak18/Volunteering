@@ -7,6 +7,7 @@ namespace Volunteering.Data.ViewModels
         public Guid CampaignId { get; set; }
         public Guid? ReportId { get; set; }
         public Guid? UserId { get; set; }
+        public ReportVM ?Report { get; set; }
         public string? Author {  get; set; }
         public string? Category { get; set; }
         public string? Subcategory { get; set; }

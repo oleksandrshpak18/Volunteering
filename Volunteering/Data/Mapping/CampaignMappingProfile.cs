@@ -19,8 +19,14 @@ namespace Volunteering.Data.Mapping
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => $"{src.UserCampaigns.First().User.UserName} {src.UserCampaigns.First().User.UserSurname}"))
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserCampaigns.First().User.UserId))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => $"{src.Subcategory.CategorySubcategories.First(x => x.SubcategoryId == src.SubcategoryId).Category.CategoryName}"))
-                //.ForMember(dest => dest.Category, opt => opt.MapFrom(src => $"test"))
                 .ForMember(dest => dest.Subcategory, opt => opt.MapFrom(src => src.Subcategory.SubcategoryName))
+                .ForPath(dest => dest.Report.CreateDate, opt => opt.MapFrom(src => src.Report.CreateDate.ToString("yyyy-MM-dd")))
+                .ForPath(dest => dest.Report.ReportPhotos, opt => opt.Ignore())
+                .ForPath(dest => dest.Report.ReportName, opt => opt.MapFrom(src => src.Report.ReportName))
+                .ForPath(dest => dest.Report.ReportDescription, opt => opt.MapFrom(src => src.Report.ReportDescription))
+                .ForPath(dest => dest.Report.ReportId, opt => opt.MapFrom(src => src.Report.ReportId))
+                .ForPath(dest => dest.Report.CampaignId, opt => opt.MapFrom(src => src.CampaignId))
+                .ForPath(dest => dest.Report.ReportPhotosBase64, opt => opt.MapFrom(x => x.Report.ReportReportPhotos.Select(y => ImageProcessor.ByteToBase64(y.ReportPhoto.Photo))))
                 ;
 
             CreateMap<CampaignVM, Campaign>()
