@@ -51,6 +51,13 @@ namespace Volunteering.Controllers
             return Ok(_service.GetRecent());
         }
 
+        [HttpGet("get-statistics"), AllowAnonymous]
+        [ProducesResponseType(typeof(StatisticsResponse), 200)]
+        public IActionResult GetStatistics()
+        {
+            return Ok(_service.GetStatistics());
+        }
+
         [HttpGet("get-new"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
         public IActionResult GetNew()

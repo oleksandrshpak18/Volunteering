@@ -74,5 +74,10 @@ namespace Volunteering.ApplicationServices
 
             return _domainService.ModelToVm(_domainService.AddReport(userId, vm));
         }
+
+        public StatisticsResponse GetStatistics()
+        {
+            return _domainService.GetStatistics();
+        }
     }
 }

@@ -192,5 +192,20 @@ namespace Volunteering.Data.DomainServices
             return res;
                 
         }
+
+        public StatisticsResponse GetStatistics()
+        {
+            var accumulated = _context.Campaigns.Select(s => s.Accumulated).Sum();
+            var registeredUsers = _context.Users.Count();
+            var finishedCampaigns = _context.Campaigns.Where(x => x.CampaignStatus.StatusName.Equals("Завершений")).Count();
+            var donations = _context.Donations.Count();
+            return new StatisticsResponse()
+            {
+                Donations = donations,
+                Accumulated = accumulated,
+                RegisteredUsers = registeredUsers,
+                FinishedCampaigns = finishedCampaigns
+            };
+        }
     }
 }
