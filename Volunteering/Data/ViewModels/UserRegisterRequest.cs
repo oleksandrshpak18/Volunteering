@@ -15,7 +15,7 @@ namespace Volunteering.Data.ViewModels
         [Required]
         public string Password { get; set; } = null!;
 
-        [Required]
+        
         [FromForm(Name = "UserPhoto")]
         public IFormFile? UserPhoto { get; set; }
     }
