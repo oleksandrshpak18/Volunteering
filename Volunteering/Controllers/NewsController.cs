@@ -19,11 +19,25 @@ namespace Volunteering.Controllers
             _service = service;
         }
 
-        [HttpGet("get-all"), AllowAnonymous]
+        [HttpGet("get-news-page"), AllowAnonymous]
         [ProducesResponseType(typeof(List<NewsVM>), 200)] 
+        public IActionResult GePage([FromQuery] int page = 1)
+        {
+            return Ok(_service.GetPage(page));
+        }
+
+        [HttpGet("get-all"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<NewsVM>), 200)]
         public IActionResult GetAll()
         {
             return Ok(_service.GetAll());
+        }
+
+        [HttpGet("get-recent"), AllowAnonymous]
+        [ProducesResponseType(typeof(List<NewsVM>), 200)]
+        public IActionResult GetRecent([FromQuery]int? count)
+        {
+            return Ok(_service.GetRecent(count));
         }
 
         [HttpPost("add"), Authorize(Roles = "Admin")]

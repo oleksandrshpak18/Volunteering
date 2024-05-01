@@ -13,6 +13,11 @@ namespace Volunteering.ApplicationServices
         {
             _domainService = domainService;
         }
+        public IEnumerable<NewsVM> GetPage(int pageNumber)
+        {
+            return _domainService.ModelToVm(_domainService.GetPage(page: pageNumber));
+        }
+
         public IEnumerable<NewsVM> GetAll()
         {
             return _domainService.ModelToVm(_domainService.GetAll());
@@ -34,6 +39,15 @@ namespace Volunteering.ApplicationServices
             }
 
             return _domainService.ModelToVm(res);
+        }
+
+        public IEnumerable<NewsVM> GetRecent(int ?count)
+        {
+            if (count == null)
+            { 
+                return _domainService.ModelToVm(_domainService.GetRecent()); 
+            }
+            return _domainService.ModelToVm(_domainService.GetRecent(count.Value));
         }
     }
 }

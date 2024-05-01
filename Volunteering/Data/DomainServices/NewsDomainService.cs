@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Drawing.Printing;
 using System.IO;
 using System.Net.Mime;
 using Volunteering.Data.Interfaces;
@@ -29,8 +31,30 @@ namespace Volunteering.Data.DomainServices
         public IEnumerable<News> GetAll()
         {
             return _context.News
-                 .Include(n => n.User)
-                 .ToList();
+                .Include(n => n.User)
+                .OrderByDescending(n => n.CreateDate)
+                .ToList();
+        }
+
+        public IEnumerable<News> GetPage(int page = 1, int pageSize = 10)
+        {
+            var query = _context.News
+                .Include(n => n.User) 
+                .OrderByDescending(n => n.CreateDate) 
+                .AsQueryable();
+
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+            return query.ToList(); 
+        }
+
+        public IEnumerable<News> GetRecent(int count = 8)
+        {
+            return _context.News
+                .Include(n => n.User) 
+                .OrderByDescending(n => n.CreateDate) 
+                .Take(count) 
+                .ToList(); 
         }
 
         public News Add(NewsVM obj)
