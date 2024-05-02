@@ -23,12 +23,12 @@ namespace Volunteering.Data.Mapping
             ;
 
             CreateMap<UserRegisterRequest, User>()
-                .ForMember(dest => dest.UserPhoto, opt => opt.MapFrom(src => ImageProcessor.ImageToByte(src.UserPhoto)))
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => HashProcessor.HashPassword(src.Password)))
                 ;
 
             CreateMap<UserDetailsVM, User>()
                 .ForMember(dest => dest.UserPhotoPassport, opt => opt.MapFrom(src => ImageProcessor.ImageToByte(src.UserPhotoPassport)))
+                .ForMember(dest => dest.UserPhoto, opt => opt.MapFrom(src => ImageProcessor.ImageToByte(src.UserPhoto)))
                 ;
 
         }

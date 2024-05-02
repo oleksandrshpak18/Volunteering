@@ -19,8 +19,7 @@ namespace Volunteering.Controllers
 
         [HttpPost("register"), AllowAnonymous]
         [ProducesResponseType(typeof(AuthResult), 200)]
-        [Consumes("multipart/form-data")]
-        public IActionResult Register([FromForm] UserRegisterRequest vm) 
+        public IActionResult Register([FromBody] UserRegisterRequest vm) 
         {
             if(ModelState.IsValid)
             {

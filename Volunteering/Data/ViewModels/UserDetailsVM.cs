@@ -19,7 +19,10 @@ namespace Volunteering.Data.ViewModels
         [Required]
         [FromForm(Name = "UserPhotoPassport")]
         public IFormFile UserPhotoPassport { get; set; }
-        
+        [Required]
+        [FromForm(Name = "UserPhoto")]
+        public IFormFile UserPhoto { get; set; }
+
         public string ?UserDescription {  get; set; }
     }
 }
