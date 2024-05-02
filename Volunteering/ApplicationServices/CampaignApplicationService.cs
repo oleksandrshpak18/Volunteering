@@ -64,9 +64,9 @@ namespace Volunteering.ApplicationServices
             return res != null;
         }
 
-        public IEnumerable<CampaignVM> GetRecent()
+        public IEnumerable<CampaignVM> GetRecent(int count)
         {
-            return _domainService.ModelToVm(_domainService.GetRecent());
+            return _domainService.ModelToVm(_domainService.GetRecent(count));
         }
 
         public CampaignVM AddReport(Guid userId, ReportVM vm)

@@ -145,5 +145,20 @@ namespace Volunteering.Data.DomainServices
 
             return topUsers; // Return the precomputed list
         }
+
+        internal UserShortInfoVM GetShortInfo(Guid userId)
+        {
+            var user = _context.Users.Find(userId);
+            if(user == null) { return null; }
+
+            return new UserShortInfoVM()
+                {
+                    UserId = user.UserId,
+                    FullName = $"{user.UserName} {user.UserSurname}", // Concatenate names
+                    Accumulated = user.UserCampaigns.Sum(c => c.Campaign.Accumulated ?? 0), // Pre-compute accumulated sum
+                    ReportCount = user.UserCampaigns.Select(c => c.Campaign).Where(y => y.Report != null).Count(), // Count the number of reports
+                    UserPhotoBase64 = ImageProcessor.ByteToBase64(user.UserPhoto)
+                };
+        }
     }
 }

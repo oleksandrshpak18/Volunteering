@@ -70,6 +70,14 @@ namespace Volunteering.Controllers
             return Ok(_service.GetTop());
         }
 
+        [HttpGet("get-short-info"), Authorize(Roles = "Registered")]
+        [ProducesResponseType(typeof(List<UserShortInfoVM>), 200)]
+        public IActionResult GetShortInfo()
+        {
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+            return Ok(_service.GetShortInfo(userId));
+        }
+
         [HttpGet("is-info-filled"), Authorize(Roles = "Registered")]
         [ProducesResponseType(typeof(Boolean), 200)]
         public IActionResult IsInfoFiled()

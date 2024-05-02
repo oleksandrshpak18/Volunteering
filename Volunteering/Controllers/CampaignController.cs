@@ -46,9 +46,9 @@ namespace Volunteering.Controllers
 
         [HttpGet("get-recent"), AllowAnonymous]
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
-        public IActionResult GetRecent()
+        public IActionResult GetRecent([FromQuery] int count = 6)
         {
-            return Ok(_service.GetRecent());
+            return Ok(_service.GetRecent(count));
         }
 
         [HttpGet("get-statistics"), AllowAnonymous]
