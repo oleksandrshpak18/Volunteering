@@ -41,10 +41,22 @@ builder.Services.AddTransient<CampaignApplicationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+if (ConnectionHealth.CheckConnectionHealth(builder.Configuration.GetConnectionString("DefaultConnectionString")))
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
-});
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+    });
+}
+else
+{
+    Console.WriteLine("Primary connection failed. Switching to fallback connection...");
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("FallbackConnectionString"));
+    });
+}
+
 
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 

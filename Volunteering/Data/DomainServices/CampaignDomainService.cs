@@ -58,7 +58,13 @@ namespace Volunteering.Data.DomainServices
 
         public Campaign? Get(Guid id)
         {
-            throw new NotImplementedException();
+           return _context.Campaigns
+                .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
+                .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
+                .Include(c => c.CampaignPriority)
+                .Include(c => c.CampaignStatus)
+                .Include(c => c.Report)
+                .FirstOrDefault(c => c.CampaignId == id);
         }
 
         public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true)

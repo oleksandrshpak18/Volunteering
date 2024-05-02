@@ -70,7 +70,7 @@ namespace Volunteering.Controllers
             return Ok(_service.GetTop());
         }
 
-        [HttpGet("get-short-info"), Authorize(Roles = "Registered")]
+        [HttpGet("get-short-info"), Authorize(Roles = "Registered,Admin")]
         [ProducesResponseType(typeof(List<UserShortInfoVM>), 200)]
         public IActionResult GetShortInfo()
         {

@@ -79,5 +79,10 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.GetStatistics();
         }
+
+        public CampaignVM? GetById(Guid id)
+        {
+            return _domainService.ModelToVm(_domainService.Get(id));
+        }
     }
 }
