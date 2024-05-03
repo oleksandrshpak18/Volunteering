@@ -21,7 +21,7 @@ namespace Volunteering.Data.Mapping
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserCampaigns.First().User.UserId))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => $"{src.Subcategory.CategorySubcategories.First(x => x.SubcategoryId == src.SubcategoryId).Category.CategoryName}"))
                 .ForMember(dest => dest.Subcategory, opt => opt.MapFrom(src => src.Subcategory.SubcategoryName))
-                .ForPath(dest => dest.Report.CreateDate, opt => opt.MapFrom(src => src.Report.CreateDate.ToString("yyyy-MM-dd")))
+                .ForPath(dest => dest.Report.CreateDateString, opt => opt.MapFrom(src => src.Report.CreateDate.ToString("yyyy-MM-dd")))
                 .ForPath(dest => dest.Report.ReportPhotos, opt => opt.Ignore())
                 .ForPath(dest => dest.Report.ReportName, opt => opt.MapFrom(src => src.Report.ReportName))
                 .ForPath(dest => dest.Report.ReportDescription, opt => opt.MapFrom(src => src.Report.ReportDescription))

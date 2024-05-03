@@ -63,7 +63,7 @@ namespace Volunteering.Data.DomainServices
                 .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
-                .Include(c => c.Report)
+                .Include(c => c.Report).ThenInclude(x => x.ReportReportPhotos).ThenInclude(y => y.ReportPhoto)
                 .FirstOrDefault(c => c.CampaignId == id);
         }
 

@@ -10,6 +10,7 @@ namespace Volunteering.Data.ViewModels
         public string? ReportName { get; set; }
         public string? ReportDescription { get; set; }
         public DateTime CreateDate { get; set; }
+        public string ?CreateDateString { get; set; }
 
         [FromForm(Name = "ReportPhotos")]
         public ICollection<IFormFile?> ReportPhotos { get; set; }
