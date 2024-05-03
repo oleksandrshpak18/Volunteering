@@ -138,5 +138,10 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.GetShortInfo(userId);
         }
+
+        public UserVM GetById(Guid userId)
+        {
+            return _domainService.ModelToVm(_domainService.GetById(userId));
+        }
     }
 }

@@ -63,6 +63,13 @@ namespace Volunteering.Controllers
             return Ok(_service.GetAll());
         }
 
+        [HttpGet("get"), AllowAnonymous]
+        [ProducesResponseType(typeof(UserVM), 200)]
+        public IActionResult GetById([FromQuery]Guid userId)
+        {
+            return Ok(_service.GetById(userId));
+        }
+
         [HttpGet("get-top"), AllowAnonymous]
         [ProducesResponseType(typeof(List<UserShortInfoVM>), 200)]
         public IActionResult GetTop([FromQuery] int count = 7)

@@ -51,6 +51,13 @@ namespace Volunteering.Controllers
             return Ok(_service.GetById(id));
         }
 
+        [HttpGet("get-by-user-id"), AllowAnonymous]
+        [ProducesResponseType(typeof(CampaignVM), 200)]
+        public IActionResult GetByUserId([FromQuery] Guid userId)
+        {
+            return Ok(_service.GetByUserId(userId));
+        }
+
         [HttpGet("get-recent"), AllowAnonymous]
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
         public IActionResult GetRecent([FromQuery] int count = 6)

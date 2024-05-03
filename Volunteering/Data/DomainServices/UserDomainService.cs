@@ -160,5 +160,10 @@ namespace Volunteering.Data.DomainServices
                     UserPhotoBase64 = ImageProcessor.ByteToBase64(user.UserPhoto)
                 };
         }
+
+        public User? GetById(Guid userId)
+        {
+            return _context.Users.Find(userId);
+        }
     }
 }

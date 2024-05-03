@@ -213,5 +213,17 @@ namespace Volunteering.Data.DomainServices
                 FinishedCampaigns = finishedCampaigns
             };
         }
+
+        public IEnumerable<Campaign> GetByUserId(Guid userId)
+        {
+            return _context.Campaigns
+                .Where(c => c.UserCampaigns.Any(x => x.User.UserId == userId))
+                .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
+                .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
+                .Include(c => c.CampaignPriority)
+                .Include(c => c.CampaignStatus)
+                .Include(c => c.Report).ThenInclude(x => x.ReportReportPhotos).ThenInclude(y => y.ReportPhoto)
+                .ToList();
+        }
     }
 }
