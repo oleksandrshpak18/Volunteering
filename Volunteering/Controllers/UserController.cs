@@ -65,9 +65,9 @@ namespace Volunteering.Controllers
 
         [HttpGet("get-top"), AllowAnonymous]
         [ProducesResponseType(typeof(List<UserShortInfoVM>), 200)]
-        public IActionResult GetTop()
+        public IActionResult GetTop([FromQuery] int count = 7)
         {
-            return Ok(_service.GetTop());
+            return Ok(_service.GetTop(count));
         }
 
         [HttpGet("get-short-info"), Authorize(Roles = "Registered,Admin")]

@@ -111,9 +111,9 @@ namespace Volunteering.ApplicationServices
             return _domainService.ModelToVm(_domainService.GetAll());
         }
 
-        public IEnumerable<UserShortInfoVM> GetTop()
+        public IEnumerable<UserShortInfoVM> GetTop(int count = 7)
         {
-            return _domainService.GetTop();
+            return _domainService.GetTop(count);
         }
 
         public bool ?IsInfoFilled(Guid userId)
