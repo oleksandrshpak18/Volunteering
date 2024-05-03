@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Volunteering.ApplicationServices;
@@ -56,6 +57,9 @@ else
         options.UseSqlServer(builder.Configuration.GetConnectionString("FallbackConnectionString"));
     });
 }
+
+builder.Services.AddHealthChecks()
+       .AddDbContextCheck<AppDbContext>();
 
 
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
