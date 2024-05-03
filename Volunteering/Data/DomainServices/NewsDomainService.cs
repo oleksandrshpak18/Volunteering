@@ -36,7 +36,7 @@ namespace Volunteering.Data.DomainServices
                 .ToList();
         }
 
-        public IEnumerable<News> GetPage(int page = 1, int pageSize = 10)
+        public IEnumerable<News> GetPage(int page = 1, int pageSize = 5)
         {
             var query = _context.News
                 .Include(n => n.User) 
@@ -75,12 +75,16 @@ namespace Volunteering.Data.DomainServices
 
         public News? Get(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.News
+                .Include(n => n.User)
+                .FirstOrDefault(c => c.NewsId == id);
         }
 
         public bool Delete(NewsVM obj)
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

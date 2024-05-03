@@ -49,5 +49,10 @@ namespace Volunteering.ApplicationServices
             }
             return _domainService.ModelToVm(_domainService.GetRecent(count.Value));
         }
+
+        public NewsVM GetById(Guid id)
+        {
+            return _domainService.ModelToVm(_domainService.Get(id));
+        }
     }
 }

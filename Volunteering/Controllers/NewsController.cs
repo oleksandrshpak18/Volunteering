@@ -26,6 +26,23 @@ namespace Volunteering.Controllers
             return Ok(_service.GetPage(page));
         }
 
+        [HttpGet("get"), AllowAnonymous]
+        [ProducesResponseType(typeof(List<NewsVM>), 200)]
+        public IActionResult GeById([FromQuery] Guid id)
+        {
+            if(ModelState.IsValid)
+            {
+                var res = _service.GetById(id);
+                if(res == null)
+                {
+                    return NotFound();
+                }
+                return Ok(res);
+            }
+
+            return BadRequest();
+        }
+
         [HttpGet("get-all"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<NewsVM>), 200)]
         public IActionResult GetAll()

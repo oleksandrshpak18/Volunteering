@@ -18,5 +18,6 @@ namespace Volunteering.Data.ViewModels
         public IFormFile? NewsPhoto { get; set; }  
         public string? NewsPhotoBase64 { get; set; }            
         public string? Author { get; set; }
+        public string? CreateDate { get; set; }
     }
 }

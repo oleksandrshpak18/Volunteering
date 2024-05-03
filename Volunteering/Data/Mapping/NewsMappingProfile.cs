@@ -14,6 +14,7 @@ namespace Volunteering.Data.Mapping
                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => $"{src.User.UserName} {src.User.UserSurname}")) // Map author's name from User object
                .ForMember(dest => dest.NewsPhotoBase64, opt => opt.MapFrom(src => ImageProcessor.ByteToBase64(src.NewsPhoto))) // Convert photo to base64 string
                .ForMember(dest => dest.NewsPhoto, opt => opt.Ignore())
+               .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
                ;
             
             CreateMap<NewsVM, News>()

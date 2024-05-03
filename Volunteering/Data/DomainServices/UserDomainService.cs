@@ -116,7 +116,8 @@ namespace Volunteering.Data.DomainServices
                 && user.Speciality != null
                 && user.PhoneNumber != null
                 && user.UserName != null
-                && user.UserSurname != null;
+                && user.UserSurname != null
+                && user.UserPhoto != null;
         }
         
         public User? Update (UserDetailsVM newUser)
