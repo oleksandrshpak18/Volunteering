@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
+using Volunteering.Helpers;
 
 namespace Volunteering.Data.Mapping
 {
@@ -13,6 +14,12 @@ namespace Volunteering.Data.Mapping
 
             CreateMap<CampaignPriority, CampaignPriorityVm>();
             CreateMap<CampaignPriorityVm, CampaignPriority>();
+
+            CreateMap<Category, CategoryVM>()
+                .ForMember(dest => dest.Subcategories, opt => opt.MapFrom(src => src.CategorySubcategories.Select(cs => cs.Subcategory.SubcategoryName).ToList()));
+            ;
+
         }
+
     }
 }

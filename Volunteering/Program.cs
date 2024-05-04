@@ -34,6 +34,8 @@ builder.Services.AddTransient<CampaignPriorityDomainService>();
 builder.Services.AddTransient<CampaignPriorityApplicationService>();
 builder.Services.AddTransient<CampaignDomainService>();
 builder.Services.AddTransient<CampaignApplicationService>();
+builder.Services.AddTransient<CategoryDomainService>();
+builder.Services.AddTransient<CategoryApplicationService>();
 
 // just empty line of code
 
