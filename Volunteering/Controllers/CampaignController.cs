@@ -39,9 +39,9 @@ namespace Volunteering.Controllers
 
         [HttpGet("get-all"), AllowAnonymous]
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
-        public IActionResult GetAll([FromQuery]CampaignFilter ?filter, string? sortBy, bool? isDescending)
+        public IActionResult GetAll([FromQuery]CampaignFilter ?filter, string? sortBy, bool isDescending=true, int page=1, int pageSize=8)
         {
-            return Ok(_service.GetAll(filter, sortBy, isDescending));
+            return Ok(_service.GetAll(filter, sortBy, isDescending, page, pageSize));
         }
 
         [HttpGet("get"), AllowAnonymous]

@@ -12,10 +12,9 @@ namespace Volunteering.ApplicationServices
             _domainService = domainService;
         }
 
-        public IEnumerable<CampaignVM> GetAll(CampaignFilter ?filter, string? sortBy, bool ?isDescending)
+        public IEnumerable<CampaignVM> GetAll(CampaignFilter ?filter, string? sortBy, bool isDescending=true, int page=1, int pageSize=8)
         {
-            if(isDescending != null) { return _domainService.ModelToVm(_domainService.GetAll(filter, sortBy, isDescending.Value)); }
-            return _domainService.ModelToVm(_domainService.GetAll(filter, sortBy));
+            return _domainService.ModelToVm(_domainService.GetAll(filter, sortBy, isDescending, page, pageSize));
         }
 
         public Response<CampaignVM> Add(Guid userId, CampaignVM vm)

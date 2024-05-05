@@ -67,7 +67,7 @@ namespace Volunteering.Data.DomainServices
                 .FirstOrDefault(c => c.CampaignId == id);
         }
 
-        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true)
+        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true, int page = 1, int pageSize = 8)
         {
             var query = _context.Campaigns
                 .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
@@ -99,6 +99,8 @@ namespace Volunteering.Data.DomainServices
             {
                 query = ApplySorting(query, sortBy, isDescending);
             }
+
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
 
             return query.ToList(); 
         }
@@ -205,6 +207,7 @@ namespace Volunteering.Data.DomainServices
             var registeredUsers = _context.Users.Count();
             var finishedCampaigns = _context.Campaigns.Where(x => x.CampaignStatus.StatusName.Equals("Завершений")).Count();
             var donations = _context.Donations.Count();
+
             return new StatisticsResponse()
             {
                 Donations = donations,
