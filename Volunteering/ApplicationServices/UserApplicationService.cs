@@ -24,7 +24,7 @@ namespace Volunteering.ApplicationServices
                     Result = false,
                     Errors = new List<string>()
                     {
-                        "Email already exists"
+                        "Електронна адреса вже використовується"
                     }
                 };
             } 
@@ -51,7 +51,7 @@ namespace Volunteering.ApplicationServices
                     Result = false,
                     Errors = new List<string>()
                     {
-                        "Error on a server side when creating a user.",
+                        "Внутрішня помилка сервера при реєстрації.",
                         ex.Message
                     }
                 };
@@ -62,7 +62,7 @@ namespace Volunteering.ApplicationServices
                 Result = false,
                 Errors = new List<string>()
                     {
-                        "Internal error on the server when creating a user.",
+                        "Помилка сервера при реєстрації.",
                     }
             };
         }
@@ -78,7 +78,7 @@ namespace Volunteering.ApplicationServices
                     Result = false,
                     Errors = new List<string>()
                     {
-                        "Invalid payload"
+                        "Неправильна пошта або пароль"
                     }
                 };
             }
@@ -92,7 +92,7 @@ namespace Volunteering.ApplicationServices
                     Result = false,
                     Errors = new List<string>()
                     {
-                        "Invalid credentials" // no more info for security reasons
+                        "Неправильна пошта або пароль" // no more info for security reasons
                     }
                 };
             }
