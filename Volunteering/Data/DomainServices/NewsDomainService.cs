@@ -80,9 +80,16 @@ namespace Volunteering.Data.DomainServices
                 .FirstOrDefault(c => c.NewsId == id);
         }
 
-        public bool Delete(NewsVM obj)
+        public bool Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var news = _context.News.Find(id);
+            if(news != null)
+            {
+                _context.News.Remove(news);
+                return true;
+            }
+            return false;
+            
         }
 
         

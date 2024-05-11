@@ -29,9 +29,9 @@ namespace Volunteering.Data.DomainServices
             return res;
         }
 
-        public bool Delete(CampaignPriorityVm obj)
+        public bool Delete(Guid id)
         {
-            var tmp = _context.CampaignPriorities.Find(obj.CampaignPriorityId);
+            var tmp = _context.CampaignPriorities.Find(id);
             if (tmp != null)
             {
                 _context.CampaignPriorities.Remove(tmp);

@@ -58,7 +58,7 @@ namespace Volunteering.Controllers
         }
 
         [HttpPost("add"), Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(CampaignStatusVm), 200)]
+        [ProducesResponseType(typeof(NewsVM), 200)]
         [Consumes("multipart/form-data")]
         public IActionResult Add([FromForm] NewsVM vm)
         {
@@ -72,7 +72,7 @@ namespace Volunteering.Controllers
         }
 
         [HttpPut("update"), Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(CampaignStatusVm), 200)]
+        [ProducesResponseType(typeof(NewsVM), 200)]
         [Consumes("multipart/form-data")]
         public IActionResult Update([FromForm] NewsVM vm)
         {
@@ -89,6 +89,18 @@ namespace Volunteering.Controllers
                 {
                     return NotFound(res);
                 }
+            }
+            return BadRequest();
+        }
+
+
+        [HttpDelete("delete"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(NewsVM), 200)]
+        public IActionResult Delete([FromQuery] Guid newsId)
+        {
+            if (ModelState.IsValid)
+            {
+                return Ok(_service.Delete(newsId));
             }
             return BadRequest();
         }

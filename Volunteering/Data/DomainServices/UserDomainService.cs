@@ -67,8 +67,8 @@ namespace Volunteering.Data.DomainServices
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("UserId", value: user.UserId.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Sub, value: user.Email),
-                    new Claim(JwtRegisteredClaimNames.Email, value: user.Email),
+                    //new Claim(JwtRegisteredClaimNames.Sub, value: user.Email),
+                    //new Claim(JwtRegisteredClaimNames.Email, value: user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, value: DateTime.Now.ToUniversalTime().ToString()),
                     new Claim(ClaimTypes.Role, value: user.UserRole.UserRoleName)

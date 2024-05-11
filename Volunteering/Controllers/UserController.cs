@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using Volunteering.ApplicationServices;
 using Volunteering.Data.ViewModels;
 using Volunteering.Helpers;
@@ -55,6 +56,42 @@ namespace Volunteering.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost("login2"), AllowAnonymous]
+        [ProducesResponseType(typeof(AuthResult), 200)]
+        public IActionResult Login2([FromBody] UserLoginRequestVM vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = _service.Login(vm);
+
+                
+
+                if (res.Result == true)
+                {
+                    var token = res.Token;
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true, // Should be set to true in production
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTime.UtcNow.AddHours(1) // Adjust as necessary
+                    };
+
+                    // Set the token as a cookie
+                    Response.Cookies.Append("accessToken", token, cookieOptions);
+
+                    return Ok(res);
+                }
+                else
+                {
+                    return BadRequest(res);
+                }
+            }
+
+            return BadRequest();
+        }
+
 
         [HttpGet("get-all"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<UserVM>), 200)]

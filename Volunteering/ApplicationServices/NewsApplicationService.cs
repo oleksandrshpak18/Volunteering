@@ -54,5 +54,10 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.ModelToVm(_domainService.Get(id));
         }
+
+        public bool Delete(Guid newsId)
+        {
+            return _domainService.Delete(newsId);
+        }
     }
 }

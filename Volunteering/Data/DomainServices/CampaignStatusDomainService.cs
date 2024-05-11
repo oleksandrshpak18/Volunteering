@@ -46,9 +46,9 @@ namespace Volunteering.Data.DomainServices
             return res;
         }
 
-        public bool Delete(CampaignStatusVm vm)
+        public bool Delete(Guid id)
         {
-            var tmp = _context.CampaignStatuses.Find(vm.CampaignStatusId);
+            var tmp = _context.CampaignStatuses.Find(id);
             if (tmp != null)
             {
                 _context.CampaignStatuses.Remove(tmp);

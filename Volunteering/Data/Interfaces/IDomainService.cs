@@ -8,6 +8,6 @@
         public T2? Get(Guid id);
         public T2 Add(T1 obj);
         public T2 Update(T1 obj);
-        public bool Delete(T1 obj);
+        public bool Delete(Guid id);
     }
 }

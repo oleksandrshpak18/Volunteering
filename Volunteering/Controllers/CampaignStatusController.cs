@@ -55,11 +55,11 @@ namespace Volunteering.Controllers
 
         [HttpDelete("delete"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(bool), 200)]
-        public IActionResult Delete([FromBody] CampaignStatusVm vm)
+        public IActionResult Delete([FromQuery] Guid id)
         {
             if (ModelState.IsValid)
             {
-                var res = _service.Delete(vm);
+                var res = _service.Delete(id);
                 if (res)
                 {
                     return NoContent();

@@ -31,9 +31,9 @@ namespace Volunteering.ApplicationServices
             return _domainService.ModelToVm(res);
         }
 
-        public bool Delete(CampaignPriorityVm vm)
+        public bool Delete(Guid id)
         {
-            return _domainService.Delete(vm);
+            return _domainService.Delete(id);
         }
     }
 }
