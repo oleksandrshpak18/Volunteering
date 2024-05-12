@@ -69,6 +69,7 @@ namespace Volunteering.Data.DomainServices
         {
             News ?res = _context.News.Find(obj.NewsId);
             _mapper.Map(obj, res);
+            //if(obj.NewsPhoto == null)
             _context.SaveChanges();
             return res;
         }
