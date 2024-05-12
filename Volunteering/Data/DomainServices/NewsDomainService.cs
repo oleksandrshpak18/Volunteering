@@ -87,6 +87,7 @@ namespace Volunteering.Data.DomainServices
             if(news != null)
             {
                 _context.News.Remove(news);
+                _context.SaveChanges();
                 return true;
             }
             return false;
