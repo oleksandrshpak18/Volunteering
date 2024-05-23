@@ -57,10 +57,10 @@ namespace Volunteering.ApplicationServices
             return _domainService.ModelToVm(_domainService.GetAll(filter));
         }
 
-        public bool UpdateStatus(CampaignStatusUpdateRequest req)
+        public CampaignStatusVm UpdateStatus(CampaignStatusUpdateRequest req)
         {
             var res = _domainService.UpdateStatus(req);
-            return res != null;
+            return new CampaignStatusVm { CampaignStatusId =res.CampaignStatusId, StatusDescription = res.StatusDescription , StatusName = res.StatusName};
         }
 
         public IEnumerable<CampaignVM> GetRecent(int count)

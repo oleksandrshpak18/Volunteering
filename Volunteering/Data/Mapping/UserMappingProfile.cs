@@ -11,7 +11,6 @@ namespace Volunteering.Data.Mapping
         {
             CreateMap<User, UserVM>()
             .ForMember(dest => dest.UserPhotoBase64, opt => opt.MapFrom(src => ImageProcessor.ByteToBase64(src.UserPhoto)))
-            //.ForMember(dest => dest.UserPhotoPassportBase64, opt => opt.MapFrom(src => ImageProcessor.ByteToBase64(src.UserPhotoPassport)))
             .ForMember(dest => dest.UserPhotoPassportBase64, opt => opt.Ignore())
             .ForMember(dest => dest.DateJoined, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
             .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))

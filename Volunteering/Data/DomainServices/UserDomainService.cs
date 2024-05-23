@@ -32,8 +32,6 @@ namespace Volunteering.Data.DomainServices
 
         public UserVM ModelToVm(User user) => _mapper.Map<UserVM>(user);
 
-        //public IEnumerable<UserShortInfoVM> ModelToShortVm(IEnumerable<User> userList) => _mapper.Map<List<UserShortInfoVM>>(userList);
-
         public List<UserVM> ModelToVm(IEnumerable<User> userList) => _mapper.Map<List<UserVM>>(userList);
         
         public User VmToModel(UserVM vm) => _mapper.Map<User>(vm);
@@ -67,8 +65,6 @@ namespace Volunteering.Data.DomainServices
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("UserId", value: user.UserId.ToString()),
-                    //new Claim(JwtRegisteredClaimNames.Sub, value: user.Email),
-                    //new Claim(JwtRegisteredClaimNames.Email, value: user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, value: DateTime.Now.ToUniversalTime().ToString()),
                     new Claim(ClaimTypes.Role, value: user.UserRole.UserRoleName)

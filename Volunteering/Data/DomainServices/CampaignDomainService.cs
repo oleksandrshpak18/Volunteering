@@ -133,15 +133,15 @@ namespace Volunteering.Data.DomainServices
             throw new NotImplementedException();
         }
 
-        public Campaign? UpdateStatus(CampaignStatusUpdateRequest req)
+        public CampaignStatus? UpdateStatus(CampaignStatusUpdateRequest req)
         {
-            var res = _context.Campaigns.Find(req.StatusId);
+            var res = _context.Campaigns.Find(req.CampaignId);
             if (res == null) return null;
             var status = _context.CampaignStatuses.FirstOrDefault(x => x.StatusName.Equals(req.NewStatus));
             if (status == null) return null;
             res.CampaignStatus = status;
             _context.SaveChanges();
-            return res;
+            return res.CampaignStatus;
         }
 
         public IEnumerable<Campaign> GetRecent(int count = 4)

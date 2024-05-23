@@ -87,7 +87,7 @@ namespace Volunteering.Controllers
             if (ModelState.IsValid)
             {
                 var res = _service.UpdateStatus(req);
-                if(res)
+                if(res != null)
                 {
                     return Ok(res);
                 }

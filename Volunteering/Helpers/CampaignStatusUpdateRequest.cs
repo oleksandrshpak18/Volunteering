@@ -2,7 +2,7 @@
 {
     public class CampaignStatusUpdateRequest
     {
-        public Guid StatusId { get; set; }
+        public Guid CampaignId { get; set; }
         public string NewStatus { get; set; }
     }
 }

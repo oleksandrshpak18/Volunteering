@@ -36,8 +36,8 @@ builder.Services.AddTransient<CampaignDomainService>();
 builder.Services.AddTransient<CampaignApplicationService>();
 builder.Services.AddTransient<CategoryDomainService>();
 builder.Services.AddTransient<CategoryApplicationService>();
-
-// just empty line of code
+builder.Services.AddTransient<DonationDomainService>();
+builder.Services.AddTransient<DonationApplicationService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
