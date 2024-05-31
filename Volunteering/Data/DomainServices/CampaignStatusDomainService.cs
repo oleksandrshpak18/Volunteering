@@ -27,7 +27,7 @@ namespace Volunteering.Data.DomainServices
 
         public IEnumerable<CampaignStatus> GetAll()
         {
-            return _context.CampaignStatuses.ToList();
+            return _context.CampaignStatuses.Where(x => x.StatusName != "Новий" && x.StatusName != "Відхилено").ToList();
         }
 
         public CampaignStatus Add(CampaignStatusVm obj)
