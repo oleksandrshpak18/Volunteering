@@ -32,6 +32,8 @@ namespace Volunteering.Data.DomainServices
 
         public UserVM ModelToVm(User user) => _mapper.Map<UserVM>(user);
 
+        public UserPublicInfoVM ModelToPublicVm(User user) => _mapper.Map<UserPublicInfoVM>(user);
+
         public List<UserVM> ModelToVm(IEnumerable<User> userList) => _mapper.Map<List<UserVM>>(userList);
         
         public User VmToModel(UserVM vm) => _mapper.Map<User>(vm);

@@ -142,5 +142,11 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.ModelToVm(_domainService.GetById(userId));
         }
+
+        
+        public UserPublicInfoVM GetPublicById(Guid userId)
+        {
+            return _domainService.ModelToPublicVm(_domainService.GetById(userId));
+        }
     }
 }

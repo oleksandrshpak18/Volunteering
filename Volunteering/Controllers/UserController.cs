@@ -101,9 +101,17 @@ namespace Volunteering.Controllers
         }
 
         [HttpGet("get"), AllowAnonymous]
-        [ProducesResponseType(typeof(UserVM), 200)]
+        [ProducesResponseType(typeof(UserPublicInfoVM), 200)]
         public IActionResult GetById([FromQuery]Guid userId)
         {
+            return Ok(_service.GetPublicById(userId));
+        }
+
+        [HttpGet("get-my"), Authorize(Roles ="Registered, Admin")]
+        [ProducesResponseType(typeof(UserVM), 200)]
+        public IActionResult GetById()
+        {
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
             return Ok(_service.GetById(userId));
         }
 
@@ -114,7 +122,7 @@ namespace Volunteering.Controllers
             return Ok(_service.GetTop(count));
         }
 
-        [HttpGet("get-short-info"), Authorize(Roles = "Registered,Admin")]
+        [HttpGet("get-short-info"), Authorize(Roles = "Registered, Admin")]
         [ProducesResponseType(typeof(List<UserShortInfoVM>), 200)]
         public IActionResult GetShortInfo()
         {

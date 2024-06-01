@@ -15,8 +15,8 @@ namespace Volunteering.Data.Mapping
             .ForMember(dest => dest.DateJoined, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
             .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))
             .ForMember(dest => dest.Password, opt => opt.Ignore())
-            .ForMember(dest => dest.Email, opt => opt.Ignore())
-            .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore())
+            //.ForMember(dest => dest.Email, opt => opt.Ignore())
+            //.ForMember(dest => dest.PhoneNumber, opt => opt.Ignore())
             .ForMember(dest => dest.CardNumber, opt => opt.Ignore())
             .ForMember(dest => dest.UserPhoto, opt => opt.Ignore())
             .ForMember(dest => dest.UserPhotoPassport, opt => opt.Ignore())
@@ -32,6 +32,11 @@ namespace Volunteering.Data.Mapping
                 .ForMember(dest => dest.UserPhoto, opt => opt.MapFrom(src => ImageProcessor.ImageToByte(src.UserPhoto)))
                 ;
 
+            CreateMap<User, UserPublicInfoVM>()
+            .ForMember(dest => dest.UserPhotoBase64, opt => opt.MapFrom(src => ImageProcessor.ByteToBase64(src.UserPhoto)))
+            .ForMember(dest => dest.DateJoined, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
+            .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))
+            ;
         }
     }
 }
