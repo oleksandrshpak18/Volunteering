@@ -47,14 +47,14 @@ namespace Volunteering.ApplicationServices
             };
         }
 
-        public IEnumerable<CampaignVM>? GetNew()
+        public IEnumerable<CampaignVM>? GetNew(int page = 1)
         {
             var filter = new CampaignFilter
             {
                 Status = "Новий"
             };
 
-            return _domainService.ModelToVm(_domainService.GetAll(filter));
+            return _domainService.ModelToVm(_domainService.GetAll(filter, pageSize:10, page:page, isAdmin: true));
         }
 
         public CampaignStatusVm UpdateStatus(CampaignStatusUpdateRequest req)

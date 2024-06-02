@@ -74,9 +74,9 @@ namespace Volunteering.Controllers
 
         [HttpGet("get-new"), Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<CampaignVM>), 200)]
-        public IActionResult GetNew()
+        public IActionResult GetNew([FromQuery] int page=1)
         {
-            return Ok(_service.GetNew());
+            return Ok(_service.GetNew(page));
         }
 
         [HttpPatch("update-status"), Authorize(Roles = "Admin")]

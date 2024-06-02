@@ -26,6 +26,9 @@ namespace Volunteering.Data.DomainServices
 
         public Campaign Add(CampaignVM obj)
         {
+            var user = _context.Users.Find(obj.UserId);
+            if (user == null) { throw new KeyNotFoundException("User was not found"); }
+
             Campaign res = VmToModel(obj);
 
             var priority = _context.CampaignPriorities.FirstOrDefault(p => p.PriorityValue == obj.CampaignPriority);
@@ -47,8 +50,7 @@ namespace Volunteering.Data.DomainServices
             _context.Campaigns.Add(res);
             _context.SaveChanges();
 
-            var user = _context.Users.Find(obj.UserId);
-            if (user == null) { throw new KeyNotFoundException("User was not found"); }
+           
 
             _context.UserCampaigns.Add(new UserCampaign { User = user, Campaign = res });
             _context.SaveChanges();
@@ -67,7 +69,7 @@ namespace Volunteering.Data.DomainServices
                 .FirstOrDefault(c => c.CampaignId == id);
         }
 
-        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true, int page = 1, int pageSize = 8)
+        public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true, int page = 1, int pageSize = 8, bool isAdmin = false)
         {
             var query = _context.Campaigns
                 .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
@@ -76,6 +78,11 @@ namespace Volunteering.Data.DomainServices
                 .Include(c => c.CampaignStatus)
                 .Include(c => c.Report)
                 .AsQueryable(); 
+
+            if(!isAdmin)
+            {
+                query = query.Where(c => c.CampaignStatus.StatusName != "Новий" && c.CampaignStatus.StatusName != "Відхилено");
+            }
 
             if (filter != null)
             {
@@ -147,6 +154,7 @@ namespace Volunteering.Data.DomainServices
         public IEnumerable<Campaign> GetRecent(int count = 4)
         {
             return _context.Campaigns
+                .Where(c => c.CampaignStatus.StatusName != "Новий" && c.CampaignStatus.StatusName != "Відхилено")
                 .OrderByDescending(c => c.CreateDate) 
                 .Take(count) 
                 .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
@@ -226,6 +234,7 @@ namespace Volunteering.Data.DomainServices
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
                 .Include(c => c.Report).ThenInclude(x => x.ReportReportPhotos).ThenInclude(y => y.ReportPhoto)
+                .Where(c => c.CampaignStatus.StatusName != "Новий" && c.CampaignStatus.StatusName != "Відхилено")
                 .ToList();
         }
     }
