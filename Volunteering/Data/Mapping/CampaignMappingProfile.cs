@@ -15,6 +15,7 @@ namespace Volunteering.Data.Mapping
     .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
     .ForMember(dest => dest.CreateDateString, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
     .ForMember(dest => dest.FinishDate, opt => opt.MapFrom(src => src.FinishDate.ToString("yyyy-MM-dd")))
+    .ForMember(dest => dest.FinishDateString, opt => opt.MapFrom(src => src.FinishDate.ToString("yyyy-MM-dd")))
     .ForMember(dest => dest.CampaignStatus, opt => opt.MapFrom(src => src.CampaignStatus.StatusName))
     .ForMember(dest => dest.CampaignPriority, opt => opt.MapFrom(src => src.CampaignPriority.PriorityValue))
     .ForMember(dest => dest.Author, opt => opt.MapFrom(src => $"{src.UserCampaigns.First().User.UserName} {src.UserCampaigns.First().User.UserSurname}"))

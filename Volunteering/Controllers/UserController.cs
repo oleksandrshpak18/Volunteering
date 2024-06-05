@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Common;
+using System.Security.Claims;
 using Volunteering.ApplicationServices;
 using Volunteering.Data.ViewModels;
 using Volunteering.Helpers;
@@ -107,12 +108,25 @@ namespace Volunteering.Controllers
             return Ok(_service.GetPublicById(userId));
         }
 
-        [HttpGet("get-my"), Authorize(Roles ="Registered, Admin")]
+        [HttpGet("get-user-details"), Authorize(Roles ="Registered, Admin")]
         [ProducesResponseType(typeof(UserVM), 200)]
-        public IActionResult GetById()
+        public IActionResult GetById([FromQuery]Guid ?id=null)
         {
-            Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
-            return Ok(_service.GetById(userId));
+            var role = HttpContext.User.FindFirst(ClaimTypes.Role).Value;
+            if(id == null)
+            {
+                Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+                return Ok(_service.GetById(userId));
+            } 
+            else if (role == "Admin")
+            {
+                return Ok(_service.GetById(id.Value));
+            } 
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("get-top"), AllowAnonymous]
@@ -134,6 +148,8 @@ namespace Volunteering.Controllers
         [ProducesResponseType(typeof(Boolean), 200)]
         public IActionResult IsInfoFiled()
         {
+
+            ////TODO: remaster
             Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
             bool ?res = _service.IsInfoFilled(userId);
             if(res == null)

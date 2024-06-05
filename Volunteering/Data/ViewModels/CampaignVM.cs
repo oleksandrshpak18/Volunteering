@@ -23,6 +23,7 @@ namespace Volunteering.Data.ViewModels
         public decimal CampaignGoal { get; set; }
         public decimal? Accumulated { get; set; }
         public DateTime FinishDate { get; set; }
+        public string ? FinishDateString { get; set; }
         public DateTime? CreateDate { get; set; }
         public string ?CreateDateString { get; set; }
     }
