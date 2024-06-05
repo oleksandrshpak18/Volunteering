@@ -54,7 +54,13 @@ namespace Volunteering.ApplicationServices
                 Status = "Новий"
             };
 
-            return _domainService.ModelToVm(_domainService.GetAll(filter, pageSize:10, page:page, isAdmin: true));
+            var res = _domainService.GetAll(filter, pageSize: 10, page: page, isAdmin: true);
+
+            var resTmp = _domainService.ModelToVm(res);
+
+            return resTmp;
+
+            //return _domainService.ModelToVm(_domainService.GetAll(filter, pageSize: 10, page: page, isAdmin: true));
         }
 
         public CampaignStatusVm UpdateStatus(CampaignStatusUpdateRequest req)
