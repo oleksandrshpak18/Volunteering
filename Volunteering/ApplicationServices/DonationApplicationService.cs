@@ -45,5 +45,34 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.ModelToVm(_domainService.GetById(id));
         }
+
+        public Response<List<DonationVM>> GetByUserId(Guid userId)
+        {
+            try
+            {
+                var res = _domainService.GetByUserId(userId);
+                if (res != null)
+                {
+                    var donationList = _domainService.ModelToVm(res);
+                    return new Response<List<DonationVM>>
+                    {
+                        Data = donationList
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<List<DonationVM>>
+                {
+                    Error = ex.Message
+                };
+            }
+
+            return new Response<List<DonationVM>>
+            {
+                Error = "Unknown error or donation could not be added."
+            };
+
+        }
     }
 }

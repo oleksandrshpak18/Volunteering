@@ -67,5 +67,22 @@ namespace Volunteering.Controllers
         }
 
 
+        [HttpGet("get-by-user-id"), Authorize(Roles ="Registered, Admin")]
+        [ProducesResponseType(typeof(List<DonationVM>), 200)]
+        public IActionResult GetByUserId()
+        {
+            if (ModelState.IsValid)
+            {
+                Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+                var response = _service.GetByUserId(userId);
+
+                if (!response.IsSuccess)
+                {
+                    return BadRequest(response.Error);
+                }
+                return Ok(response.Data);
+            }
+            return BadRequest();
+        }
     }
 }
