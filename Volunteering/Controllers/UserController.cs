@@ -144,12 +144,10 @@ namespace Volunteering.Controllers
             return Ok(_service.GetShortInfo(userId));
         }
 
-        [HttpGet("is-info-filled"), Authorize(Roles = "Registered")]
+        [HttpGet("is-info-filled"), Authorize(Roles = "Registered, Admin")]
         [ProducesResponseType(typeof(Boolean), 200)]
         public IActionResult IsInfoFiled()
         {
-
-            ////TODO: remaster
             Guid userId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
             bool ?res = _service.IsInfoFilled(userId);
             if(res == null)

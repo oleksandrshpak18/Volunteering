@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Volunteering.ApplicationServices;
 using Volunteering.Data.Models;
 using Volunteering.Data.ViewModels;
@@ -53,9 +54,17 @@ namespace Volunteering.Controllers
 
         [HttpGet("get-by-user-id"), AllowAnonymous]
         [ProducesResponseType(typeof(CampaignVM), 200)]
-        public IActionResult GetByUserId([FromQuery] Guid userId)
+        public IActionResult GetByUserId([FromQuery] Guid? userId=null)
         {
-            return Ok(_service.GetByUserId(userId));
+            if (userId == null)
+            {
+                Guid id = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+                return Ok(_service.GetByUserId(id, isOwner: true));
+            }
+            else 
+            {
+                return Ok(_service.GetByUserId(userId.Value));
+            }  
         }
 
         [HttpGet("get-recent"), AllowAnonymous]

@@ -48,7 +48,7 @@ namespace Volunteering.Data.DomainServices
 
         public IEnumerable<CampaignPriority> GetAll()
         {
-            return _context.CampaignPriorities.ToList();
+            return _context.CampaignPriorities.OrderBy(x => x.PriorityValue).ToList();
         }
 
         public CampaignPriority Update(CampaignPriorityVm obj)

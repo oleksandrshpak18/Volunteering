@@ -54,7 +54,7 @@ namespace Volunteering.ApplicationServices
                 Status = "Новий"
             };
 
-            var res = _domainService.GetAll(filter, pageSize: 10, page: page, isAdmin: true);
+            var res = _domainService.GetAll(filter, pageSize: 10, page: page, isAdmin: true, sortBy: "createDate");
 
             var resTmp = _domainService.ModelToVm(res);
 
@@ -90,9 +90,9 @@ namespace Volunteering.ApplicationServices
             return _domainService.ModelToVm(_domainService.Get(id));
         }
 
-        public IEnumerable<CampaignVM> GetByUserId(Guid userId)
+        public IEnumerable<CampaignVM> GetByUserId(Guid userId, bool isOwner=false)
         {
-            return _domainService.ModelToVm(_domainService.GetByUserId(userId));
+            return _domainService.ModelToVm(_domainService.GetByUserId(userId, isOwner));
         }
     }
 }

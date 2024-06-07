@@ -225,17 +225,24 @@ namespace Volunteering.Data.DomainServices
             };
         }
 
-        public IEnumerable<Campaign> GetByUserId(Guid userId)
+        public IEnumerable<Campaign> GetByUserId(Guid userId, bool isOwner=false)
         {
-            return _context.Campaigns
+            var res = _context.Campaigns
                 .Where(c => c.UserCampaigns.Any(x => x.User.UserId == userId))
+                .OrderByDescending(x => x.CreateDate)
                 .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
                 .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
                 .Include(c => c.Report).ThenInclude(x => x.ReportReportPhotos).ThenInclude(y => y.ReportPhoto)
-                .Where(c => c.CampaignStatus.StatusName != "Новий" && c.CampaignStatus.StatusName != "Відхилено")
-                .ToList();
+                .AsQueryable();
+
+            if(!isOwner)
+            {
+                res = res.Where(c => c.CampaignStatus.StatusName != "Новий" && c.CampaignStatus.StatusName != "Відхилено");
+            }
+
+            return res.ToList();            
         }
     }
 }
