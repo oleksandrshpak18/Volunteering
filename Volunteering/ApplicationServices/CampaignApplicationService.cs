@@ -94,5 +94,17 @@ namespace Volunteering.ApplicationServices
         {
             return _domainService.ModelToVm(_domainService.GetByUserId(userId, isOwner));
         }
+
+        public FullStatisticsResponse GetFullStatistics()
+        {
+            NumberStatistics numberStat = _domainService.GetNumberStatistics();
+            List< CategoryStatistics> categoryStatistics = _domainService.GetCategoryStatistics();
+
+            return new FullStatisticsResponse
+            {
+                NumberStatistics = numberStat,
+                CategoriesStatistics = categoryStatistics
+            };
+        }
     }
 }

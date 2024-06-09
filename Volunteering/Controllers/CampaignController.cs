@@ -124,5 +124,23 @@ namespace Volunteering.Controllers
             }
             return BadRequest();
         }
+
+
+        [HttpGet("full-statistics"), AllowAnonymous]
+        [ProducesResponseType(typeof(FullStatisticsResponse), 200)]
+        public IActionResult GetFullStatistics()
+        {
+
+            if (ModelState.IsValid)
+            { 
+                var res = _service.GetFullStatistics();
+                if (res != null)
+                {
+                    return Ok(res);
+                }
+                return NotFound();
+            }
+            return BadRequest();
+        }
     }
 }

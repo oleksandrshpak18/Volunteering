@@ -244,5 +244,77 @@ namespace Volunteering.Data.DomainServices
 
             return res.ToList();            
         }
+
+        public NumberStatistics GetNumberStatistics()
+        {
+            var total = _context.Donations.Sum(x => x.DonationValue);
+            var count = _context.Donations.Count();
+
+            if(count == 0)
+            {
+                return new NumberStatistics();
+            }
+
+            return new NumberStatistics
+            {
+                AccumulatedTotal = total.Value,
+                DonationsCount = count,
+                DonationsAverage = total.Value / count
+            };
+        }
+
+
+        public List<CategoryStatistics> GetCategoryStatistics()
+        {
+            var categoryStatistics = _context.Donations
+                .Join(_context.Campaigns,
+                      donation => donation.CampaignId,
+                      campaign => campaign.CampaignId,
+                      (donation, campaign) => new { donation, campaign })
+                .Join(_context.CategorySubcategories,
+                      campaign => campaign.campaign.SubcategoryId,
+                      categorySubcategory => categorySubcategory.SubcategoryId,
+                      (campaign, categorySubcategory) => new { campaign, categorySubcategory })
+                .Join(_context.Categories,
+                      categorySubcategory => categorySubcategory.categorySubcategory.CategoryId,
+                      category => category.CategoryId,
+                      (categorySubcategory, category) => new { categorySubcategory, category })
+                .Join(_context.Subcategories,
+                      x => x.categorySubcategory.categorySubcategory.SubcategoryId,
+                      subcategory => subcategory.SubcategoryId,
+                      (x, subcategory) => new { x.categorySubcategory, x.category, subcategory })
+                .GroupBy(x => new { x.category.CategoryName, x.subcategory.SubcategoryName })
+                .Select(g => new
+                {
+                    CategoryName = g.Key.CategoryName,
+                    SubcategoryName = g.Key.SubcategoryName,
+                    Accumulated = g.Sum(d => d.categorySubcategory.campaign.donation.DonationValue ?? 0)
+                })
+                .GroupBy(x => x.CategoryName)
+                .Select(g => new CategoryStatistics
+                {
+                    Category = g.Key,
+                    Accumulated = g.Sum(d => d.Accumulated),
+                    Subcategories = g.Select(x => new SubcategoryStatistics
+                    {
+                        Subcategory = x.SubcategoryName,
+                        Accumulated = x.Accumulated
+                    }).ToList()
+                }).ToList();
+
+            return categoryStatistics;
+        }
+
+
+
+
+
+
+
     }
+
+
+
+
 }
+
