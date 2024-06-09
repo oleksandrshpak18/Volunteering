@@ -188,6 +188,10 @@ namespace Volunteering.Data.DomainServices
             {
                 return null; 
             }
+            if(res.CampaignStatus.StatusName != "Очікується звіт")
+            {
+                return null;
+            }
 
             res.Report = new Report()
             {
@@ -204,6 +208,8 @@ namespace Volunteering.Data.DomainServices
                     }).ToList() ?? new List<ReportReportPhoto>()
             };
 
+            _context.SaveChanges();
+            res.CampaignStatus = _context.CampaignStatuses.FirstOrDefault(x => x.StatusName == "Завершений");
             _context.SaveChanges();
             return res;
                 
