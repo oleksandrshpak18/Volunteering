@@ -8,7 +8,7 @@ using Volunteering.Helpers;
 
 namespace Volunteering.Data.DomainServices
 {
-    public class CampaignDomainService 
+    public class CampaignDomainService
     {
         private AppDbContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +32,7 @@ namespace Volunteering.Data.DomainServices
             Campaign res = VmToModel(obj);
 
             var priority = _context.CampaignPriorities.FirstOrDefault(p => p.PriorityValue == obj.CampaignPriority);
-            if(priority == null) { throw new KeyNotFoundException("Priority was not found"); }
+            if (priority == null) { throw new KeyNotFoundException("Priority was not found"); }
 
             var status = _context.CampaignStatuses.FirstOrDefault(p => p.StatusName == "Новий");
             if (status == null) { throw new KeyNotFoundException("Status was not found"); }
@@ -44,13 +44,13 @@ namespace Volunteering.Data.DomainServices
             if (subcategory == null) { throw new KeyNotFoundException("Subcategory was not found"); }
 
             res.CampaignPriority = priority;
-            res.CampaignStatus = status;    
+            res.CampaignStatus = status;
             res.Subcategory = subcategory;
 
             _context.Campaigns.Add(res);
             _context.SaveChanges();
 
-           
+
 
             _context.UserCampaigns.Add(new UserCampaign { User = user, Campaign = res });
             _context.SaveChanges();
@@ -58,17 +58,42 @@ namespace Volunteering.Data.DomainServices
             return res;
         }
 
-        public Campaign? Get(Guid id)
+        public Campaign? Get(Guid id, Guid? userId = null)
         {
-           return _context.Campaigns
+            var campaign = _context.Campaigns
                 .Include(c => c.UserCampaigns).ThenInclude(c => c.User)
                 .Include(c => c.Subcategory).ThenInclude(sc => sc.CategorySubcategories).ThenInclude(cs => cs.Category)
                 .Include(c => c.CampaignPriority)
                 .Include(c => c.CampaignStatus)
                 .Include(c => c.Report).ThenInclude(x => x.ReportReportPhotos).ThenInclude(y => y.ReportPhoto)
                 .FirstOrDefault(c => c.CampaignId == id);
-        }
 
+            if (campaign == null) { return null; }
+
+            var okStatus = new List<string> { "Триває", "Завершений", "Очікується звіт" };
+            var tmp1 = okStatus.IndexOf(campaign.CampaignStatus.StatusName) == -1;
+
+            if (tmp1)
+            {
+                if (userId.HasValue)
+                {
+                    if (campaign.UserCampaigns.FirstOrDefault(x => x.CampaignId == campaign.CampaignId).User.UserId == userId.Value)
+                    {
+                        return campaign;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return campaign;
+            }
+            return null;
+        }
+    
         public IEnumerable<Campaign> GetAll(CampaignFilter? filter = null, string? sortBy = null, bool isDescending = true, int page = 1, int pageSize = 8, bool isAdmin = false)
         {
             var query = _context.Campaigns

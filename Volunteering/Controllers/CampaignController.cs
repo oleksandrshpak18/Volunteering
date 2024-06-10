@@ -49,7 +49,28 @@ namespace Volunteering.Controllers
         [ProducesResponseType(typeof(CampaignVM), 200)]
         public IActionResult GetById([FromQuery] Guid id)
         {
-            return Ok(_service.GetById(id));
+            if(id != null)
+            {
+                Guid? reqUserId = null;
+                try
+                {
+                    reqUserId = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+
+                }
+                catch (Exception ex)
+                {
+                    reqUserId = null;
+                }
+               
+                var res = _service.GetById(id, reqUserId);
+                if (res == null)
+                {
+                    return NoContent();
+                }
+                return Ok(res);
+                
+            }
+            return BadRequest();
         }
 
         [HttpGet("get-by-user-id"), AllowAnonymous]
@@ -58,13 +79,21 @@ namespace Volunteering.Controllers
         {
             if (userId == null)
             {
-                Guid id = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
-                return Ok(_service.GetByUserId(id, isOwner: true));
+                try
+                {
+                    Guid id = Guid.Parse(HttpContext.User.FindFirst("UserId")?.Value);
+                    return Ok(_service.GetByUserId(id, isOwner: true));
+
+                }
+                catch (Exception ex)
+                {
+                   return BadRequest(ex);
+                }
             }
-            else 
+            else
             {
                 return Ok(_service.GetByUserId(userId.Value));
-            }  
+            }
         }
 
         [HttpGet("get-recent"), AllowAnonymous]

@@ -85,9 +85,9 @@ namespace Volunteering.ApplicationServices
             return _domainService.GetStatistics();
         }
 
-        public CampaignVM? GetById(Guid id)
+        public CampaignVM? GetById(Guid id, Guid? userId = null)
         {
-            return _domainService.ModelToVm(_domainService.Get(id));
+            return _domainService.ModelToVm(_domainService.Get(id, userId));
         }
 
         public IEnumerable<CampaignVM> GetByUserId(Guid userId, bool isOwner=false)

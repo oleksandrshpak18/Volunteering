@@ -36,6 +36,7 @@ namespace Volunteering.Data.DomainServices
 
                 if (campaign == null) { throw new Exception("Такого збору не існує"); }
                 if (campaign?.CampaignStatus?.StatusName == "Очікується звіт") {throw new Exception("Необхідну суму вже зібрано. Оберіть інший збір");}
+                if (campaign?.CampaignStatus?.StatusName == "Завершений") {throw new Exception("Збір завершено, і кошти на нього більше не зараховуються. Оберіть інший збір");}
             } 
             else
             {
