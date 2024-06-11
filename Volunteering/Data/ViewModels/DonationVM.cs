@@ -10,7 +10,8 @@ namespace Volunteering.Data.ViewModels
 
         public string? CampaignName { get; set; }
         public Guid? CampaignId { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Сума донату обов'язкова для заповнення")]
+        [Range(0.01, 999_999.99, ErrorMessage = "Необхідна сума повинна бути більше 0 і менше 1,000,000 (1 млн грн)")]
         public decimal? DonationValue { get; set; }
 
         public string? DonationDate { get; set; }
